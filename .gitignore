@@ -5,6 +5,7 @@
 /output_hls
 package-lock.json
 vitis-comp.json
+.Xil
 
 # Extensions
 ltex.dictionary.*

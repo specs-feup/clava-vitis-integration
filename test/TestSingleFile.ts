@@ -21,4 +21,6 @@ console.log(cfg);
 console.log("---------------------------------");
 
 const vitis = new VitisHls().setConfig(config);
-vitis.synthesize();
+const report = vitis.synthesize();
+
+console.log(report);

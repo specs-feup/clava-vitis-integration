@@ -1,6 +1,6 @@
 import { AmdPlatform, Clock, Uncertainty } from "./HlsConfig.js"
 
-export type VitisHlsReport = {
+export type HlsReport = {
     platform: string | AmdPlatform,
     topFunction: string,
 

@@ -1,12 +1,12 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import { XMLParser } from "fast-xml-parser";
 import { ClockUnit, UncertaintyUnit } from "./HlsConfig.js";
-import { TimeUnit, VitisHlsReport } from "./VitisHlsReport.js";
+import { TimeUnit, HlsReport } from "./HlsReport.js";
 
-export class VitisHlsReportParser {
+export class HlsReportParser {
     constructor() { }
 
-    public parseReport(reportPath: string): VitisHlsReport {
+    public parseReport(reportPath: string): HlsReport {
         const reportData = Io.readFile(reportPath);
 
         const parser = new XMLParser();
@@ -21,7 +21,7 @@ export class VitisHlsReportParser {
         const execAvg = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Average-caseRealTimeLatency"].split(" ") as string[];
         const execBest = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Best-caseRealTimeLatency"].split(" ") as string[];
 
-        const report: VitisHlsReport = {
+        const report: HlsReport = {
             platform: json.profile.UserAssignments.Part,
             topFunction: json.profile.UserAssignments.TopModelName,
 
@@ -58,7 +58,7 @@ export class VitisHlsReportParser {
         return report;
     }
 
-    public prettyPrint(report: VitisHlsReport): string {
+    public prettyPrint(report: HlsReport): string {
         const out = `${'-'.repeat(20)}
 Vitis HLS Report
 ${'-'.repeat(20)}

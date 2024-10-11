@@ -4,8 +4,8 @@ import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
 import Clava from "@specs-feup/clava/api/clava/Clava.js";
 import { HlsConfig, NullConfig } from "./HlsConfig.js";
 import chalk from 'chalk';
-import { VitisHlsReportParser } from "./VitisHlsReportParser.js";
-import { VitisHlsReport } from "./VitisHlsReport.js";
+import { HlsReportParser } from "./HlsReportParser.js";
+import { HlsReport } from "./HlsReport.js";
 
 export default class VitisHls {
     private config: HlsConfig;
@@ -38,7 +38,7 @@ export default class VitisHls {
         return this;
     }
 
-    public synthesize(timestamped: boolean = true): VitisHlsReport {
+    public synthesize(timestamped: boolean = true): HlsReport {
         const [cfgPath, fullProjName] = this.createWorkspace(true);
         const workingDir = this.runVpp(cfgPath, fullProjName);
         return this.parseReport(workingDir);
@@ -84,7 +84,7 @@ export default class VitisHls {
     private parseReport(path: string): any {
         const reportPath = `${path}/hls/syn/report/csynth.xml`;
 
-        const parser = new VitisHlsReportParser();
+        const parser = new HlsReportParser();
         return parser.parseReport(reportPath);
     }
 }

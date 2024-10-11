@@ -1,8 +1,10 @@
 ##### User-added #####
-woven_code/
+/woven_code
 /dist
 /docs
+/output_hls
 package-lock.json
+vitis-comp.json
 
 # Extensions
 ltex.dictionary.*

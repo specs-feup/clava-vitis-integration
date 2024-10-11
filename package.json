@@ -5,14 +5,15 @@
   "description": "A Clava extension to interact with AMD/Xilinx's Vitis ",
   "type": "module",
   "scripts": {
-    "test:a": "clava dist/test/TestScenarioA.js -- clang inputs/scenarioA/",
+    "test:a": "clava dist/test/TestScenarioA.js -- clang inputs/scenarioA.cpp",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint .",
     "docs": "typedoc"
   },
   "dependencies": {
-    "@specs-feup/clava": "^3.0.1"
+    "@specs-feup/clava": "^3.0.1",
+    "chalk": "^5.3.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

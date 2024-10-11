@@ -1,6 +1,6 @@
 
 
-void loop_characterization(int A[100], int B[200], int C[300])
+void foo(int A[100], int B[200], int C[300])
 {
     for (int i = 0; i < 100; i++)
     {

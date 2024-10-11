@@ -1,9 +1,11 @@
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
 import { FileJp } from "@specs-feup/clava/api/Joinpoints.js";
 
 export class HlsConfig {
     private topFunction: string;
     private platform: AmdPlatform | string = AmdPlatform.ZCU102;
-    private clock: Clock = { value: 100, unit: ClockUnit.MEGAHERTZ };
+    private clock: Clock = { value: 10, unit: ClockUnit.NANOSECOND };
+    private uncertainty: Uncertainty = { value: 2.5, unit: UncertaintyUnit.NANOSECOND };
     private flowTarget: FlowTarget = FlowTarget.VITIS;
     private outputFormat: OutputFormat = OutputFormat.VITIS_XO;
     private enablePackaging: boolean = false;
@@ -25,6 +27,11 @@ export class HlsConfig {
 
     public setClock(clock: Clock): HlsConfig {
         this.clock = clock;
+        return this;
+    }
+
+    public setUncertainty(uncertainty: Uncertainty): HlsConfig {
+        this.uncertainty = uncertainty;
         return this;
     }
 
@@ -67,6 +74,10 @@ export class HlsConfig {
         return this.clock;
     }
 
+    public getUncertainty(): Uncertainty {
+        return this.uncertainty;
+    }
+
     public getFlowTarget(): FlowTarget {
         return this.flowTarget;
     }
@@ -84,6 +95,12 @@ export class HlsConfig {
     }
 
     public generateConfigFile(): string {
+        let files = "";
+        for (const source of this.sources) {
+            console.log(source.path);
+            files = files.concat(`syn.file=${source.filename}\n`);
+        }
+
         const config = `
 part=${this.platform}
 
@@ -91,12 +108,10 @@ part=${this.platform}
 flow_target=${this.flowTarget}
 package.output.format=${this.outputFormat}
 package.output.syn=${this.enablePackaging}
-clock_uncertainty=${this.clock.value}${this.clock.unit}
+clock_uncertainty=${this.uncertainty.value}${this.uncertainty.unit}
+clock=${this.clock.value}${this.clock.unit}
 syn.top=${this.topFunction}
-`;
-        for (const source of this.sources) {
-            config.concat(`syn.file=${source.filename}\n`);
-        }
+${files}`;
 
         return config;
     }
@@ -110,7 +125,7 @@ export class NullConfig extends HlsConfig {
 
 export enum AmdPlatform {
     ZCU102 = "xczu9eg-ffvb1156-2-e",
-    ZCU102_DFX = "",
+    ZCU102_DFX = "xczu9eg-ffvb1156-2-e",
     ZCU104 = "",
     VMK180 = "",
     VCK190 = "",
@@ -120,8 +135,8 @@ export enum AmdPlatform {
 }
 
 export enum FlowTarget {
-    VITIS,
-    VIVADO
+    VITIS = "vitis",
+    VIVADO = "vivado"
 }
 
 export enum ClockUnit {
@@ -147,7 +162,7 @@ export type Clock = {
 }
 
 export type Uncertainty = {
-    uncertainty: number,
+    value: number,
     unit: UncertaintyUnit
 }
 

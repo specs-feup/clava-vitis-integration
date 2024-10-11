@@ -1,20 +1,17 @@
-import Query from "@specs-feup/lara/api/weaver/Query.js";
-import { FileJp, FunctionJp } from "@specs-feup/clava/api/Joinpoints.js";
+import { FileJp } from "@specs-feup/clava/api/Joinpoints.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
+import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
 import { HlsConfig, NullConfig } from "./HlsConfig.js";
+import chalk from 'chalk';
 
 export default class VitisHls {
-    private files: FileJp[] = [];
     private config: HlsConfig;
     private outputDir: string = "output_hls";
     private projectName: string = "vitis_hls_project";
 
     constructor() {
         this.config = new NullConfig();
-    }
-
-    public addFile(file: FileJp): VitisHls {
-        this.files.push(file);
-        return this;
     }
 
     public setConfig(config: HlsConfig): VitisHls {
@@ -33,26 +30,55 @@ export default class VitisHls {
     }
 
     public reset(): VitisHls {
-        this.files = [];
         this.config = new NullConfig();
         this.outputDir = "output_hls";
-        this.projectName = "vitis_hls_project";
+        this.projectName = "vitis_hls_run";
         return this;
     }
 
-    public synthesize(): void {
-
+    public synthesize(timestamped: boolean = true): void {
+        const [cfgPath, fullProjName] = this.createWorkspace(true);
+        this.runVpp(cfgPath, fullProjName);
+        return this.parseReport();
     }
 
-    private createProjectDir(): void {
-
+    private log(msg: string): void {
+        console.log(`[${chalk.blue("Clava-VitisHLS")}] ${msg}`);
     }
 
-    private createTclScript(): void {
+    private createWorkspace(timestamped: boolean): [string, string] {
+        const timestamp = timestamped ? `_${Math.floor(Date.now() / 1000)}` : "";
+        const fullProjName = `${this.projectName}${timestamp}`;
 
+        const relativePath = `${this.outputDir}/${fullProjName}`;
+
+        Io.mkdir(relativePath);
+        Clava.writeCode(relativePath);
+
+        const cfg = this.config.generateConfigFile();
+        const cfgFilePath = Io.writeFile(`${relativePath}/hls_config.cfg`, cfg).getAbsolutePath();
+
+        return [cfgFilePath, fullProjName];
     }
 
-    private runVpp(): void {
+    private runVpp(configPath: string, fullProjName: string): void {
         // v++ -c --mode hls --config /home/tls/Misc/VitisGenericWorkspace/hls_component/hls_config.cfg --work_dir hls_component
+        const workingDir = `${this.outputDir}/${fullProjName}`;
+
+        const vpp = new ProcessExecutor();
+        vpp.setPrintToConsole(true);
+
+        this.log('-'.repeat(50));
+        this.log(`Running VitisHLS for project ${fullProjName}`);
+        this.log(`Starting synthesis at ${new Date().toISOString()}`);
+
+        vpp.execute("v++", "-c", "--mode", "hls", "--config", configPath, "--work_dir", workingDir);
+
+        this.log(`Finished synthesis at ${new Date().toISOString()}`);
+        this.log('-'.repeat(50));
+    }
+
+    private parseReport(): any {
+        return null;
     }
 }

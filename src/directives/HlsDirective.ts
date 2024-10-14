@@ -1,7 +1,9 @@
-export abstract class HlsDirective {
-    protected enabled: boolean = true;
+import { Pragma } from "@specs-feup/clava/api/Joinpoints.js";
 
-    public setEnabled(enabled: boolean): void {
+export abstract class HlsDirective extends Pragma {
+    protected enabled: boolean = false;
 
+    constructor(directive: string) {
+        super(`#pragma HLS ${directive}`);
     }
 }

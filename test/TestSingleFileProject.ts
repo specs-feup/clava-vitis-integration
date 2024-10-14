@@ -22,3 +22,4 @@ console.log("---------------------------------");
 
 const vitis = new VitisHls().setConfig(config);
 const dirs = vitis.createWorkspace(true);
+console.log(dirs);

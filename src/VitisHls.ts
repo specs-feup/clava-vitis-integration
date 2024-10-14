@@ -1,7 +1,5 @@
-import { FileJp } from "@specs-feup/clava/api/Joinpoints.js";
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
-import Clava from "@specs-feup/clava/api/clava/Clava.js";
 import { HlsConfig, NullConfig } from "./HlsConfig.js";
 import chalk from 'chalk';
 import { HlsReportParser } from "./HlsReportParser.js";

@@ -5,8 +5,10 @@
   "description": "A Clava extension to interact with AMD/Xilinx's Vitis ",
   "type": "module",
   "scripts": {
-    "test:single": "clava dist/test/TestSingleFile.js -- clang inputs/scenarioA.cpp",
+    "test:proj": "clava dist/test/TestSingleFileProject.js -- clang inputs/scenarioA",
+    "test:syn": "clava dist/test/TestSingleFileSynthesis.js -- clang inputs/scenarioB.cpp",
     "test:report": "clava dist/test/TestReportParsing.js",
+    "test:edgedetect": "clava dist/test/TestEdgedetect.js -- clang inputs/edgedetect",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint .",

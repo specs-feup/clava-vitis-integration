@@ -58,7 +58,7 @@ export class HlsReportParser {
         return report;
     }
 
-    public prettyPrint(report: HlsReport): string {
+    public static prettyPrintReport(report: HlsReport): string {
         const out = `${'-'.repeat(20)}
 Vitis HLS Report
 ${'-'.repeat(20)}
@@ -94,7 +94,6 @@ LUT %: ${(Math.round(report.perLUT * 100)).toFixed(2)}%
 BRAM %: ${(Math.round(report.perBRAM * 100)).toFixed(2)}% 
 DSP %: ${(Math.round(report.perDSP * 100)).toFixed(2)}% 
 ${'-'.repeat(20)}`;
-
         console.log(out);
         return out;
     }

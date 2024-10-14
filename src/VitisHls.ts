@@ -8,12 +8,15 @@ import { HlsReportParser } from "./HlsReportParser.js";
 import { HlsReport } from "./HlsReport.js";
 
 export default class VitisHls {
+    private readonly defaultState = { config: new NullConfig(), outputDir: "output_hls", projectName: "vpp_hls_run" };
     private config: HlsConfig;
-    private outputDir: string = "output_hls";
-    private projectName: string = "vitis_hls_project";
+    private outputDir: string;
+    private projectName: string;
 
     constructor() {
-        this.config = new NullConfig();
+        this.config = this.defaultState.config;
+        this.outputDir = this.defaultState.outputDir;
+        this.projectName = this.defaultState.projectName;
     }
 
     public setConfig(config: HlsConfig): VitisHls {
@@ -32,30 +35,32 @@ export default class VitisHls {
     }
 
     public reset(): VitisHls {
-        this.config = new NullConfig();
-        this.outputDir = "output_hls";
-        this.projectName = "vitis_hls_run";
+        this.config = this.defaultState.config;
+        this.outputDir = this.defaultState.outputDir;
+        this.projectName = this.defaultState.projectName;
         return this;
     }
 
-    public synthesize(timestamped: boolean = true): HlsReport {
-        const [cfgPath, fullProjName] = this.createWorkspace(true);
-        const workingDir = this.runVpp(cfgPath, fullProjName);
+    public synthesize(timestamped: boolean = true, silent: boolean = false): HlsReport {
+        const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
+        const workingDir = this.runVpp(cfgPath, fullProjName, silent);
         return this.parseReport(workingDir);
     }
 
-    private log(msg: string): void {
-        console.log(`[${chalk.blue("Clava-VitisHLS")}] ${msg}`);
-    }
-
-    private createWorkspace(timestamped: boolean): [string, string] {
+    public createWorkspace(timestamped: boolean): [string, string] {
         const timestamp = timestamped ? `_${Math.floor(Date.now() / 1000)}` : "";
         const fullProjName = `${this.projectName}${timestamp}`;
 
         const relativePath = `${this.outputDir}/${fullProjName}`;
 
+        if (Io.isFolder(relativePath)) {
+            Io.deleteFolder(relativePath);
+        }
         Io.mkdir(relativePath);
-        Clava.writeCode(relativePath);
+
+        for (const file of this.config.getSources()) {
+            file.write(relativePath);
+        }
 
         const cfg = this.config.generateConfigFile();
         const cfgFilePath = Io.writeFile(`${relativePath}/hls_config.cfg`, cfg).getAbsolutePath();
@@ -63,15 +68,20 @@ export default class VitisHls {
         return [cfgFilePath, fullProjName];
     }
 
-    private runVpp(configPath: string, fullProjName: string): string {
+    private log(msg: string): void {
+        console.log(`[${chalk.blue("Clava-VitisHLS")}] ${msg}`);
+    }
+
+    private runVpp(configPath: string, fullProjName: string, silent: boolean = false): string {
         const workingDir = `${this.outputDir}/${fullProjName}`;
 
         const vpp = new ProcessExecutor();
-        vpp.setPrintToConsole(true);
+        vpp.setPrintToConsole(!silent);
 
         this.log('-'.repeat(50));
-        this.log(`Running VitisHLS for project ${fullProjName}`);
-        this.log(`Starting synthesis at ${new Date().toISOString()}`);
+        this.log(`Executing Vitis in synthesis mode for project ${fullProjName} using command:`);
+        this.log(`v++ -c --mode hls --config ${configPath} --work_dir ${workingDir}`);
+        this.log(`Starting synthesis at ${new Date().toISOString()} in ${silent ? "silent" : "verbose"} mode`);
 
         vpp.execute("v++", "-c", "--mode", "hls", "--config", configPath, "--work_dir", workingDir);
 

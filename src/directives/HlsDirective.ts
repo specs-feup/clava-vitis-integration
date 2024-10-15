@@ -25,13 +25,17 @@ export abstract class HlsDirective {
         }
     }
 
-    protected abstract getAttachmentTarget(jp: Joinpoint): Joinpoint;
-
     protected updatePragma(): Pragma {
         const directive = this.generateDirective();
         this.pragma = new Pragma(`#pragma HLS ${directive}`);
         return this.pragma;
     }
+
+    protected joinDirectiveArgs(args: string[]): string {
+        return args.join(" ").trim().replace(/\s+/g, ' ');
+    }
+
+    protected abstract getAttachmentTarget(jp: Joinpoint): Joinpoint | null;
 
     protected abstract generateDirective(): string;
 }

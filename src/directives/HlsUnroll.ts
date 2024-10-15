@@ -57,7 +57,8 @@ export class HlsUnroll extends HlsDirective {
         const skipExitCheck = this.#skipExitCheck ? "skip_exit_check" : "";
         const off = this.#isOff ? "off=true" : "";
 
-        const directive = ["unroll", factor, skipExitCheck, off].join(" ").trim();
+        const args = ["unroll", factor, skipExitCheck, off];
+        const directive = this.joinDirectiveArgs(args);
         return directive;
     }
 }

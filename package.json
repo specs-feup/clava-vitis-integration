@@ -10,6 +10,7 @@
     "test:report": "clava dist/test/TestReportParsing.js",
     "test:edgedetect": "clava dist/test/TestEdgedetect.js -- clang inputs/edgedetect",
     "test:pragmas": "clava dist/test/TestDirectiveInsertion.js -- clang inputs/edgedetect",
+    "test:pragmasyn": "clava dist/test/TestDirectiveSynthesis.js -- clang inputs/edgedetect",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint .",

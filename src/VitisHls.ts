@@ -81,7 +81,7 @@ export default class VitisHls {
         this.log(`v++ -c --mode hls --config ${configPath} --work_dir ${workingDir}`);
         this.log(`Starting synthesis at ${new Date().toISOString()} in ${silent ? "silent" : "verbose"} mode`);
 
-        vpp.execute("v++", "-c", "--mode", "hls", "--config", configPath, "--work_dir", workingDir);
+        const ret = vpp.execute("v++", "-c", "--mode", "hls", "--config", configPath, "--work_dir", workingDir);
 
         this.log(`Finished synthesis at ${new Date().toISOString()}`);
         this.log('-'.repeat(50));
@@ -89,8 +89,13 @@ export default class VitisHls {
         return workingDir;
     }
 
-    private parseReport(path: string): any {
+    private parseReport(path: string): HlsReport {
         const reportPath = `${path}/hls/syn/report/csynth.xml`;
+
+        if (!Io.isFile(reportPath)) {
+            this.log(`Report file not found at ${reportPath}, likely due to an error during synthesis.`);
+            return HlsReportParser.emptyReport();
+        }
 
         const parser = new HlsReportParser();
         return parser.parseReport(reportPath);

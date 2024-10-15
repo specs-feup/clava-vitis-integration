@@ -58,6 +58,43 @@ export class HlsReportParser {
         return report;
     }
 
+    public static emptyReport(): HlsReport {
+        const report: HlsReport = {
+            platform: "<no_platform>",
+            topFunction: "<no_function>",
+
+            clockTarget: { value: -1, unit: ClockUnit.NANOSECOND },
+            clockTargetUncertainty: { value: -1, unit: UncertaintyUnit.NANOSECOND },
+            clockEstim: { value: -1, unit: ClockUnit.NANOSECOND },
+            frequencyMaxMHz: -1,
+
+            latencyWorst: -1,
+            latencyAvg: -1,
+            latencyBest: -1,
+            hasFixedLatency: true,
+
+            execTimeWorst: { value: -1, unit: TimeUnit.MICROSECOND },
+            execTimeAvg: { value: -1, unit: TimeUnit.MICROSECOND },
+            execTimeBest: { value: -1, unit: TimeUnit.MICROSECOND },
+
+            FF: -1,
+            LUT: -1,
+            BRAM: -1,
+            DSP: -1,
+
+            availFF: -1,
+            availLUT: -1,
+            availBRAM: -1,
+            availDSP: -1,
+
+            perFF: -1,
+            perLUT: -1,
+            perBRAM: -1,
+            perDSP: -1
+        };
+        return report;
+    }
+
     public static prettyPrintReport(report: HlsReport): string {
         const out = `${'-'.repeat(20)}
 Vitis HLS Report

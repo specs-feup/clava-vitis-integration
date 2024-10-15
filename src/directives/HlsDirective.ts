@@ -20,7 +20,9 @@ export abstract class HlsDirective {
     public attach(joinpoint: Joinpoint): void {
         this.updatePragma();
         const target = this.getAttachmentTarget(joinpoint);
-        target.insertBefore(this.pragma);
+        if (target != null) {
+            target.insertBefore(this.pragma);
+        }
     }
 
     protected abstract getAttachmentTarget(jp: Joinpoint): Joinpoint;

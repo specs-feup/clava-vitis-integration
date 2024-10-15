@@ -5,7 +5,6 @@ import { HlsInline, InlineTypes } from "../src/directives/HlsInline.js";
 import { HlsPipeline, PipeliningStyle } from "../src/directives/HlsPipeline.js";
 import { ArrayPartitionType, HlsArrayPartition } from "../src/directives/HlsArrayPartition.js";
 
-
 for (const loop of Query.search(Loop)) {
     const unroll = new HlsUnroll(4, true, false);
     unroll.attach(loop);

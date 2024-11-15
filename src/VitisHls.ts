@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import { HlsReportParser } from "./HlsReportParser.js";
 import { HlsReport } from "./HlsReport.js";
 
-export default class VitisHls {
+export class VitisHls {
     private readonly defaultState = { config: new NullConfig(), outputDir: "output_hls", projectName: "vpp_hls_run" };
     private config: HlsConfig;
     private outputDir: string;

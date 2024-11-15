@@ -1,7 +1,7 @@
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FileJp } from "@specs-feup/clava/api/Joinpoints.js";
 import { AmdPlatform, ClockUnit, HlsConfig, OutputFormat, UncertaintyUnit } from "../src/HlsConfig.js";
-import VitisHls from "../src/VitisHls.js";
+import { VitisHls } from "../src/VitisHls.js";
 
 const files: FileJp[] = [];
 for (const file of Query.search(FileJp)) {

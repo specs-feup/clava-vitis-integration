@@ -1,4 +1,4 @@
-import { AdjustedType, ArrayType, FunctionJp, Loop, Param, PointerType, Pragma } from "@specs-feup/clava/api/Joinpoints.js";
+import { AdjustedType, FunctionJp, Loop, Param, PointerType } from "@specs-feup/clava/api/Joinpoints.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { HlsUnroll } from "../src/directives/HlsUnroll.js";
 import { HlsInline, InlineTypes } from "../src/directives/HlsInline.js";

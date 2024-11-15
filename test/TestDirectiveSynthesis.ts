@@ -4,7 +4,7 @@ import { HlsUnroll } from "../src/directives/HlsUnroll.js";
 import { HlsInline, InlineTypes } from "../src/directives/HlsInline.js";
 import { HlsPipeline, PipeliningStyle } from "../src/directives/HlsPipeline.js";
 import { AmdPlatform, ClockUnit, HlsConfig, OutputFormat, UncertaintyUnit } from "../src/HlsConfig.js";
-import VitisHls from "../src/VitisHls.js";
+import { VitisHls } from "../src/VitisHls.js";
 
 const ed = Query.search(FunctionJp, { name: "edge_detect" }).first() as FunctionJp;
 

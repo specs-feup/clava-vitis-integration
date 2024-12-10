@@ -42,6 +42,7 @@ export class VitisHls {
     public synthesize(timestamped: boolean = true, silent: boolean = false): HlsReport {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
         const workingDir = this.runVpp(cfgPath, fullProjName, silent);
+        this.cleanup(workingDir);
         return this.parseReport(workingDir);
     }
 
@@ -87,6 +88,12 @@ export class VitisHls {
         this.log('-'.repeat(50));
 
         return workingDir;
+    }
+
+    private cleanup(workingDir: string): void {
+        if (Io.isFile(`${workingDir}/../vitis-comp.json`)) {
+            Io.deleteFile(`${workingDir}/../vitis-comp.json`);
+        }
     }
 
     private parseReport(path: string): HlsReport {

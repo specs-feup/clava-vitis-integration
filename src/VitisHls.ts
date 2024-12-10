@@ -46,8 +46,8 @@ export class VitisHls {
     }
 
     public createWorkspace(timestamped: boolean): [string, string] {
-        const timestamp = timestamped ? `_${Math.floor(Date.now() / 1000)}` : "";
-        const fullProjName = `${this.projectName}${timestamp}`;
+        const timestamp = timestamped ? `${Math.floor(Date.now() / 1000)}` : "";
+        const fullProjName = `${this.projectName}_${timestamp}_${this.config.getTopFunction()}`;
 
         const relativePath = `${this.outputDir}/${fullProjName}`;
 
@@ -78,7 +78,7 @@ export class VitisHls {
 
         this.log('-'.repeat(50));
         this.log(`Executing Vitis in synthesis mode for project ${fullProjName} using command:`);
-        this.log(`v++ -c --mode hls --config ${configPath} --work_dir ${workingDir}`);
+        this.log(`    v++ -c --mode hls --config ${configPath} --work_dir ${workingDir}`);
         this.log(`Starting synthesis at ${new Date().toISOString()} in ${silent ? "silent" : "verbose"} mode`);
 
         const ret = vpp.execute("v++", "-c", "--mode", "hls", "--config", configPath, "--work_dir", workingDir);

@@ -82,9 +82,11 @@ export class VitisHls {
         this.log(`    v++ -c --mode hls --config ${configPath} --work_dir ${workingDir}`);
         this.log(`Starting synthesis at ${new Date().toISOString()} in ${silent ? "silent" : "verbose"} mode`);
 
+        // vitis-run --mode hls --impl --config /home/tls/Dev/heterogeneous-vitis-apps/amd-vadd/hello_world_vadd/hls_config.cfg --work_dir vadd
         const ret = vpp.execute("v++", "-c", "--mode", "hls", "--config", configPath, "--work_dir", workingDir);
 
         this.log(`Finished synthesis at ${new Date().toISOString()}`);
+        this.log(`v++ exit code: ${ret}`);
         this.log('-'.repeat(50));
 
         return workingDir;

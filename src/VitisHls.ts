@@ -5,6 +5,11 @@ import chalk from 'chalk';
 import { HlsReportParser } from "./HlsReportParser.js";
 import { HlsReport } from "./HlsReport.js";
 
+export enum VppMode {
+    SYN = "synthesis",
+    IMPL = "implementation"
+}
+
 export class VitisHls {
     private readonly defaultState = { config: new NullConfig(), outputDir: "output_hls", projectName: "vpp_hls_run" };
     private config: HlsConfig;
@@ -41,8 +46,17 @@ export class VitisHls {
 
     public synthesize(timestamped: boolean = true, silent: boolean = false): HlsReport {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
-        const workingDir = this.runVpp(cfgPath, fullProjName, silent);
+        const workingDir = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
         this.cleanup(workingDir);
+
+        return this.parseReport(workingDir);
+    }
+
+    public implement(timestamped: boolean = true, silent: boolean = false): HlsReport {
+        const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
+        const workingDir = this.runVpp(VppMode.IMPL, cfgPath, fullProjName, silent);
+        this.cleanup(workingDir);
+
         return this.parseReport(workingDir);
     }
 
@@ -71,21 +85,32 @@ export class VitisHls {
         console.log(`[${chalk.blue("Clava-VitisHLS")}] ${msg}`);
     }
 
-    private runVpp(configPath: string, fullProjName: string, silent: boolean = false): string {
+    private runVpp(mode: VppMode, configPath: string, fullProjName: string, silent: boolean = false): string {
         const workingDir = `${this.outputDir}/${fullProjName}`;
+
+        let command = "v++";
+        switch (mode) {
+            case VppMode.SYN:
+                command += ` -c --mode hls --config ${configPath} --work_dir ${workingDir}`;
+                break;
+            case VppMode.IMPL:
+                command += ` -c --mode hls --impl --config ${configPath} --work_dir ${workingDir}`;
+                break;
+            default:
+                throw new Error(`Invalid Vitis mode: ${mode}`);
+        }
 
         const vpp = new ProcessExecutor();
         vpp.setPrintToConsole(!silent);
 
         this.log('-'.repeat(50));
-        this.log(`Executing Vitis in synthesis mode for project ${fullProjName} using command:`);
-        this.log(`    v++ -c --mode hls --config ${configPath} --work_dir ${workingDir}`);
-        this.log(`Starting synthesis at ${new Date().toISOString()} in ${silent ? "silent" : "verbose"} mode`);
+        this.log(`Executing Vitis in ${mode} mode for project ${fullProjName} using command:`);
+        this.log(`    ${command}`);
+        this.log(`Starting ${mode} at ${new Date().toISOString()} in ${silent ? "silent" : "verbose"} mode`);
 
-        // vitis-run --mode hls --impl --config /home/tls/Dev/heterogeneous-vitis-apps/amd-vadd/hello_world_vadd/hls_config.cfg --work_dir vadd
-        const ret = vpp.execute("v++", "-c", "--mode", "hls", "--config", configPath, "--work_dir", workingDir);
+        const ret = vpp.execute(...command.split(" "));
 
-        this.log(`Finished synthesis at ${new Date().toISOString()}`);
+        this.log(`Finished ${mode} at ${new Date().toISOString()}`);
         this.log(`v++ exit code: ${ret}`);
         this.log('-'.repeat(50));
 

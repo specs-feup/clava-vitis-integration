@@ -1,6 +1,6 @@
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FileJp } from "@specs-feup/clava/api/Joinpoints.js";
-import { AmdPlatform, ClockUnit, HlsConfig, OutputFormat, UncertaintyUnit } from "../src/VitisHlsConfig.js";
+import { AmdPlatform, ClockUnit, VitisHlsConfig, OutputFormat, UncertaintyUnit } from "../src/VitisHlsConfig.js";
 import { VitisHls } from "../src/VitisHls.js";
 
 const files: FileJp[] = [];
@@ -8,7 +8,7 @@ for (const file of Query.search(FileJp)) {
     files.push(file);
 }
 
-const config = new HlsConfig("foo")
+const config = new VitisHlsConfig("foo")
     .addSources(files)
     .setClock({ value: 100, unit: ClockUnit.MEGAHERTZ })
     .setUncertainty({ value: 2, unit: UncertaintyUnit.NANOSECOND })

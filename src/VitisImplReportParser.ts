@@ -1,12 +1,12 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import { XMLParser } from "fast-xml-parser";
 import { ClockUnit, UncertaintyUnit } from "./VitisHlsConfig.js";
-import { TimeUnit, VitisSynReport } from "./VitisReports.js";
+import { TimeUnit, VitisImplReport, VitisSynReport } from "./VitisReports.js";
 
-export class VitisSynReportParser {
+export class VitisImplReportParser {
     constructor() { }
 
-    public parseReport(reportPath: string): VitisSynReport {
+    public parseReport(reportPath: string): VitisImplReport {
         const reportData = Io.readFile(reportPath);
 
         const parser = new XMLParser();
@@ -21,7 +21,7 @@ export class VitisSynReportParser {
         const execAvg = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Average-caseRealTimeLatency"].split(" ") as string[];
         const execBest = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Best-caseRealTimeLatency"].split(" ") as string[];
 
-        const report: VitisSynReport = {
+        const report: VitisImplReport = {
             platform: json.profile.UserAssignments.Part,
             topFunction: json.profile.UserAssignments.TopModelName,
 
@@ -58,8 +58,8 @@ export class VitisSynReportParser {
         return report;
     }
 
-    public static emptyReport(): VitisSynReport {
-        const report: VitisSynReport = {
+    public static emptyReport(): VitisImplReport {
+        const report: VitisImplReport = {
             platform: "<no_platform>",
             topFunction: "<no_function>",
 
@@ -95,42 +95,9 @@ export class VitisSynReportParser {
         return report;
     }
 
-    public static prettyPrintReport(report: VitisSynReport): string {
-        const out = `${'-'.repeat(20)}
-Vitis HLS Synthesis Report
-${'-'.repeat(20)}
-Platform: ${report.platform}
-Top Function: ${report.topFunction} 
-${'-'.repeat(20)}
-Target Clock: ${report.clockTarget.value} ${report.clockTarget.unit} 
-Clock Uncertainty: ${report.clockTargetUncertainty.value} ${report.clockTargetUncertainty.unit} 
-Estimated Clock: ${report.clockEstim.value} ${report.clockEstim.unit} 
-Max Frequency: ${report.frequencyMaxMHz.toFixed(2)} MHz
-${'-'.repeat(20)}
-Worst Latency: ${report.latencyWorst} 
-Average Latency: ${report.latencyAvg} 
-Best Latency: ${report.latencyBest} 
-Has Fixed Latency: ${report.hasFixedLatency ? "yes" : "no"} 
-${'-'.repeat(20)}
-Worst Execution Time: ${report.execTimeWorst.value} ${report.execTimeWorst.unit} 
-Average Execution Time: ${report.execTimeAvg.value} ${report.execTimeAvg.unit} 
-Best Execution Time: ${report.execTimeBest.value} ${report.execTimeBest.unit} 
-${'-'.repeat(20)}
-Used FF: ${report.FF} 
-Used LUT: ${report.LUT} 
-Used BRAM: ${report.BRAM} 
-Used DSP: ${report.DSP} 
-${'-'.repeat(20)}
-Available FF: ${report.availFF} 
-Available LUT: ${report.availLUT} 
-Available BRAM: ${report.availBRAM} 
-Available DSP: ${report.availDSP} 
-${'-'.repeat(20)}
-FF %: ${(Math.round(report.perFF * 100)).toFixed(2)}% 
-LUT %: ${(Math.round(report.perLUT * 100)).toFixed(2)}% 
-BRAM %: ${(Math.round(report.perBRAM * 100)).toFixed(2)}% 
-DSP %: ${(Math.round(report.perDSP * 100)).toFixed(2)}% 
-${'-'.repeat(20)}`;
+    public static prettyPrintReport(report: VitisImplReport): string {
+        const out = `${'-'.repeat(20)}`;
+
         console.log(out);
         return out;
     }

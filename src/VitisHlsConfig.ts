@@ -1,7 +1,6 @@
-import Clava from "@specs-feup/clava/api/clava/Clava.js";
 import { FileJp } from "@specs-feup/clava/api/Joinpoints.js";
 
-export class HlsConfig {
+export class VitisHlsConfig {
     private topFunction: string;
     private platform: AmdPlatform | string = AmdPlatform.ZCU102;
     private clock: Clock = { value: 10, unit: ClockUnit.NANOSECOND };
@@ -15,47 +14,47 @@ export class HlsConfig {
         this.topFunction = topFunction;
     }
 
-    public setTopFunction(topFunction: string): HlsConfig {
+    public setTopFunction(topFunction: string): VitisHlsConfig {
         this.topFunction = topFunction;
         return this;
     }
 
-    public setPlatform(platform: AmdPlatform | string): HlsConfig {
+    public setPlatform(platform: AmdPlatform | string): VitisHlsConfig {
         this.platform = platform;
         return this;
     }
 
-    public setClock(clock: Clock): HlsConfig {
+    public setClock(clock: Clock): VitisHlsConfig {
         this.clock = clock;
         return this;
     }
 
-    public setUncertainty(uncertainty: Uncertainty): HlsConfig {
+    public setUncertainty(uncertainty: Uncertainty): VitisHlsConfig {
         this.uncertainty = uncertainty;
         return this;
     }
 
-    public setFlowTarget(flowTarget: FlowTarget): HlsConfig {
+    public setFlowTarget(flowTarget: FlowTarget): VitisHlsConfig {
         this.flowTarget = flowTarget;
         return this;
     }
 
-    public setOutputFormat(outputFormat: OutputFormat): HlsConfig {
+    public setOutputFormat(outputFormat: OutputFormat): VitisHlsConfig {
         this.outputFormat = outputFormat;
         return this;
     }
 
-    public setEnablePackaging(enable: boolean): HlsConfig {
+    public setEnablePackaging(enable: boolean): VitisHlsConfig {
         this.enablePackaging = enable;
         return this;
     }
 
-    public addSource(source: FileJp): HlsConfig {
+    public addSource(source: FileJp): VitisHlsConfig {
         this.sources.add(source);
         return this;
     }
 
-    public addSources(sources: FileJp[]): HlsConfig {
+    public addSources(sources: FileJp[]): VitisHlsConfig {
         sources.forEach(element => {
             this.sources.add(element);
         });
@@ -117,7 +116,7 @@ ${files}`;
     }
 }
 
-export class NullConfig extends HlsConfig {
+export class NullConfig extends VitisHlsConfig {
     constructor() {
         super("<no_function>");
     }

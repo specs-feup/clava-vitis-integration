@@ -1,15 +1,15 @@
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { FileJp } from "@specs-feup/clava/api/Joinpoints.js";
-import { AmdPlatform, ClockUnit, HlsConfig, OutputFormat, UncertaintyUnit } from "../src/VitisHlsConfig.js";
+import { AmdPlatform, ClockUnit, VitisHlsConfig, OutputFormat, UncertaintyUnit } from "../src/VitisHlsConfig.js";
 import { VitisHls } from "../src/VitisHls.js";
-import { HlsReportParser } from "../src/VitisSynReportParser.js";
+import { VitisSynReportParser } from "../src/VitisSynReportParser.js";
 
 const files: FileJp[] = [];
 for (const file of Query.search(FileJp)) {
     files.push(file);
 }
 
-const config = new HlsConfig("convolve2d")
+const config = new VitisHlsConfig("convolve2d")
     .addSources(files)
     .setClock({ value: 100, unit: ClockUnit.MEGAHERTZ })
     .setUncertainty({ value: 2, unit: UncertaintyUnit.NANOSECOND })
@@ -23,11 +23,11 @@ console.log("---------------------------------");
 
 const vitis = new VitisHls().setConfig(config);
 const report = vitis.synthesize(true);
-HlsReportParser.prettyPrintReport(report);
+VitisSynReportParser.prettyPrintReport(report);
 
 console.log("Finished synthesis in verbose mode. Doing it again in silent mode...");
 
 const reportSilent = vitis.synthesize(true, true);
-HlsReportParser.prettyPrintReport(reportSilent);
+VitisSynReportParser.prettyPrintReport(reportSilent);
 
 console.log("Finished synthesis in silent mode.");

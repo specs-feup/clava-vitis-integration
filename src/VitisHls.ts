@@ -1,8 +1,8 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
-import { HlsConfig, NullConfig } from "./VitisHlsConfig.js";
+import { VitisHlsConfig, NullConfig } from "./VitisHlsConfig.js";
 import chalk from 'chalk';
-import { HlsReportParser } from "./VitisSynReportParser.js";
+import { VitisSynReportParser } from "./VitisSynReportParser.js";
 import { VitisImplReport, VitisSynReport } from "./VitisReports.js";
 
 export enum VppMode {
@@ -12,7 +12,7 @@ export enum VppMode {
 
 export class VitisHls {
     private readonly defaultState = { config: new NullConfig(), outputDir: "output_hls", projectName: "vpp_hls_run" };
-    private config: HlsConfig;
+    private config: VitisHlsConfig;
     private outputDir: string;
     private projectName: string;
 
@@ -22,7 +22,7 @@ export class VitisHls {
         this.projectName = this.defaultState.projectName;
     }
 
-    public setConfig(config: HlsConfig): VitisHls {
+    public setConfig(config: VitisHlsConfig): VitisHls {
         this.config = config;
         return this;
     }
@@ -128,10 +128,10 @@ export class VitisHls {
 
         if (!Io.isFile(reportPath)) {
             this.log(`Report file not found at ${reportPath}, likely due to an error during synthesis`);
-            return HlsReportParser.emptyReport();
+            return VitisSynReportParser.emptyReport();
         }
 
-        const parser = new HlsReportParser();
+        const parser = new VitisSynReportParser();
         return parser.parseReport(reportPath);
     }
 
@@ -140,10 +140,10 @@ export class VitisHls {
 
         if (!Io.isFile(reportPath)) {
             this.log(`Report file not found at ${reportPath}, likely due to an error during implementation`);
-            return HlsReportParser.emptyReport();
+            return VitisSynReportParser.emptyReport();
         }
 
-        const parser = new HlsReportParser();
+        const parser = new VitisSynReportParser();
         return parser.parseReport(reportPath);
     }
 }

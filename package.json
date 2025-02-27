@@ -7,7 +7,8 @@
   "scripts": {
     "test:proj": "clava dist/test/TestSingleFileProject.js -- clang inputs/scenarioA",
     "test:syn": "clava dist/test/TestSingleFileSynthesis.js -- clang inputs/scenarioB.cpp",
-    "test:report": "clava dist/test/TestReportParsing.js",
+    "test:syn-report": "clava dist/test/TestSynReportParsing.js",
+    "test:impl-report": "clava dist/test/TestImplReportParsing.js",
     "test:edgedetect": "clava dist/test/TestEdgedetect.js -- clang inputs/edgedetect",
     "test:pragmas": "clava dist/test/TestDirectiveInsertion.js -- clang inputs/edgedetect",
     "test:pragmasyn": "clava dist/test/TestDirectiveSynthesis.js -- clang inputs/edgedetect",
@@ -17,8 +18,8 @@
     "docs": "typedoc"
   },
   "exports": {
-    "./HlsConfig": "./dist/src/HlsConfig.js",
-    "./HlsReport": "./dist/src/HlsReport.js",
+    "./VitisHlsConfig": "./dist/src/VitisHlsConfig.js",
+    "./VitisReports": "./dist/src/VitisReports.js",
     "./VitisHls": "./dist/src/VitisHls.js",
     "./HlsDirective": "./dist/src/directives/HlsDirective.js",
     "./HlsArrayPartition": "./dist/src/directives/HlsArrayPartition.js",

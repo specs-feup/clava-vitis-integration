@@ -1,0 +1,224 @@
+<profile>
+  <RunData>
+    <RUN_TYPE>impl</RUN_TYPE>
+    <VIVADO_VERSION>v.2024.2</VIVADO_VERSION>
+    <ROOT_MODULE_CELL>bd_0_i/hls_inst</ROOT_MODULE_CELL>
+  </RunData>
+  <TimingReport>
+    <TargetClockPeriod>6.667</TargetClockPeriod>
+    <AchievedClockPeriod>3.311</AchievedClockPeriod>
+    <CLOCK_NAME>ap_clk</CLOCK_NAME>
+    <CP_FINAL>3.311</CP_FINAL>
+    <CP_ROUTE>3.311</CP_ROUTE>
+    <CP_SYNTH>1.944</CP_SYNTH>
+    <CP_TARGET>6.667</CP_TARGET>
+    <SLACK_FINAL>3.356</SLACK_FINAL>
+    <SLACK_ROUTE>3.356</SLACK_ROUTE>
+    <SLACK_SYNTH>4.723</SLACK_SYNTH>
+    <TIMING_MET>TRUE</TIMING_MET>
+    <TNS_FINAL>0.000</TNS_FINAL>
+    <TNS_ROUTE>0.000</TNS_ROUTE>
+    <TNS_SYNTH>0.000</TNS_SYNTH>
+    <WNS_FINAL>3.356</WNS_FINAL>
+    <WNS_ROUTE>3.356</WNS_ROUTE>
+    <WNS_SYNTH>4.723</WNS_SYNTH>
+  </TimingReport>
+  <AreaReport>
+    <Resources>
+      <BRAM>3</BRAM>
+      <CLB>864</CLB>
+      <DSP>0</DSP>
+      <FF>4246</FF>
+      <LATCH>0</LATCH>
+      <LUT>3719</LUT>
+      <SRL>935</SRL>
+      <URAM>0</URAM>
+    </Resources>
+    <AvailableResources>
+      <BRAM>1824</BRAM>
+      <CLB>34260</CLB>
+      <DSP>2520</DSP>
+      <FF>548160</FF>
+      <LUT>274080</LUT>
+      <URAM>0</URAM>
+    </AvailableResources>
+  </AreaReport>
+  <RtlModules>
+    <RtlModule CELL="inst" DEPTH="0" IS_TOP="1" TYPE="function" MODULENAME="vadd" DISPNAME="inst" RTLNAME="vadd">
+      <SubModules count="16">compute_add_U0 control_s_axi_U entry_proc_U0 gmem0_m_axi_U gmem1_m_axi_U inStream1_U inStream2_U outStream_U out_r_c_U read_input_1_U0 read_input_U0 size_c1_U size_c_U start_for_compute_add_U0_U start_for_write_result_U0_U write_result_U0</SubModules>
+      <Resources BRAM="3" FF="4246" LUT="3719"/>
+      <LocalResources FF="9" LUT="2"/>
+    </RtlModule>
+    <RtlModule CELL="inst/compute_add_U0" DEPTH="1" TYPE="function" MODULENAME="compute_add" DISPNAME="compute_add_U0" RTLNAME="vadd_compute_add">
+      <SubModules count="1">grp_compute_add_Pipeline_execute_fu_52</SubModules>
+      <Resources FF="70" LUT="107"/>
+      <LocalResources FF="36" LUT="2"/>
+    </RtlModule>
+    <RtlModule CELL="inst/compute_add_U0/grp_compute_add_Pipeline_execute_fu_52" DEPTH="2" TYPE="function" MODULENAME="compute_add_Pipeline_execute" DISPNAME="grp_compute_add_Pipeline_execute_fu_52" RTLNAME="vadd_compute_add_Pipeline_execute">
+      <SubModules count="1">flow_control_loop_pipe_sequential_init_U</SubModules>
+      <Resources FF="34" LUT="105"/>
+      <LocalResources FF="32" LUT="33"/>
+    </RtlModule>
+    <RtlModule CELL="inst/compute_add_U0/grp_compute_add_Pipeline_execute_fu_52/flow_control_loop_pipe_sequential_init_U" DEPTH="3" TYPE="rtl" MODULENAME="flow_control_loop_pipe_sequential_init" DISPNAME="flow_control_loop_pipe_sequential_init_U" RTLNAME="vadd_flow_control_loop_pipe_sequential_init">
+      <Resources FF="2" LUT="72"/>
+    </RtlModule>
+    <RtlModule CELL="inst/control_s_axi_U" DEPTH="1" TYPE="resource" MODULENAME="control_s_axi" DISPNAME="control_s_axi_U" RTLNAME="vadd_control_s_axi">
+      <Resources FF="280" LUT="327"/>
+      <BindNode BINDTYPE="adapter" BRAM="0" BUNDLEDNAME="control" DISPNAME="bind_adapter " DSP="0" ID="" IMPL="" LATENCY="" LOOP="" OPTYPE="" PRAGMA="" RTLNAME="control_s_axi_U" SOURCE="" STORAGESIZE="" STORAGESUBTYPE="s_axilite" STORAGEUSAGE="interface" URAM="0" VARIABLE=""/>
+    </RtlModule>
+    <RtlModule CELL="inst/entry_proc_U0" DEPTH="1" TYPE="function" MODULENAME="entry_proc" DISPNAME="entry_proc_U0" RTLNAME="vadd_entry_proc">
+      <Resources FF="1" LUT="2"/>
+    </RtlModule>
+    <RtlModule CELL="inst/gmem0_m_axi_U" DEPTH="1" TYPE="resource" MODULENAME="gmem0_m_axi" DISPNAME="gmem0_m_axi_U" RTLNAME="vadd_gmem0_m_axi">
+      <Resources BRAM="2" FF="1951" LUT="1883"/>
+      <BindNode BINDTYPE="adapter" BRAM="4" BUNDLEDNAME="gmem0" DISPNAME="bind_adapter " DSP="0" ID="" IMPL="" LATENCY="" LOOP="" OPTYPE="" PRAGMA="" RTLNAME="gmem0_m_axi_U" SOURCE="" STORAGESIZE="" STORAGESUBTYPE="m_axi" STORAGEUSAGE="interface" URAM="0" VARIABLE=""/>
+    </RtlModule>
+    <RtlModule CELL="inst/gmem1_m_axi_U" DEPTH="1" TYPE="resource" MODULENAME="gmem1_m_axi" DISPNAME="gmem1_m_axi_U" RTLNAME="vadd_gmem1_m_axi">
+      <Resources BRAM="1" FF="861" LUT="852"/>
+      <BindNode BINDTYPE="adapter" BRAM="2" BUNDLEDNAME="gmem1" DISPNAME="bind_adapter " DSP="0" ID="" IMPL="" LATENCY="" LOOP="" OPTYPE="" PRAGMA="" RTLNAME="gmem1_m_axi_U" SOURCE="" STORAGESIZE="" STORAGESUBTYPE="m_axi" STORAGEUSAGE="interface" URAM="0" VARIABLE=""/>
+    </RtlModule>
+    <RtlModule CELL="inst/inStream1_U" DEPTH="1" TYPE="resource" MODULENAME="fifo_w32_d2_S" DISPNAME="inStream1_U" RTLNAME="vadd_fifo_w32_d2_S">
+      <Resources FF="70" LUT="6"/>
+      <LocalResources FF="6" LUT="6"/>
+      <BindNode BINDTYPE="storage" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="srl" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="inStream1_U" SOURCE="" STORAGESIZE="32 2 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="inStream1" VISIBLE="true"/>
+    </RtlModule>
+    <RtlModule CELL="inst/inStream2_U" DEPTH="1" TYPE="resource" MODULENAME="fifo_w32_d2_S" DISPNAME="inStream2_U" RTLNAME="vadd_fifo_w32_d2_S">
+      <Resources FF="70" LUT="23"/>
+      <LocalResources FF="6" LUT="7"/>
+      <BindNode BINDTYPE="storage" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="srl" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="inStream2_U" SOURCE="" STORAGESIZE="32 2 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="inStream2" VISIBLE="true"/>
+    </RtlModule>
+    <RtlModule CELL="inst/outStream_U" DEPTH="1" TYPE="resource" MODULENAME="fifo_w32_d2_S" DISPNAME="outStream_U" RTLNAME="vadd_fifo_w32_d2_S">
+      <Resources FF="70" LUT="22"/>
+      <LocalResources FF="6" LUT="6"/>
+      <BindNode BINDTYPE="storage" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="srl" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="outStream_U" SOURCE="" STORAGESIZE="32 2 1" STORAGESUBTYPE="stream" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="outStream" VISIBLE="true"/>
+    </RtlModule>
+    <RtlModule CELL="inst/out_r_c_U" DEPTH="1" TYPE="resource" MODULENAME="fifo_w64_d4_S" DISPNAME="out_r_c_U" RTLNAME="vadd_fifo_w64_d4_S">
+      <Resources FF="7" LUT="41"/>
+      <LocalResources FF="7" LUT="8"/>
+      <BindNode BINDTYPE="storage" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="srl" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="out_r_c_U" SOURCE="src/vadd.cpp:113" STORAGESIZE="64 4 1" STORAGESUBTYPE="scalar prop" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="out_r_c" VISIBLE="true"/>
+    </RtlModule>
+    <RtlModule CELL="inst/read_input_1_U0" DEPTH="1" TYPE="function" MODULENAME="read_input_1" DISPNAME="read_input_1_U0" RTLNAME="vadd_read_input_1">
+      <SubModules count="1">flow_control_loop_pipe_U</SubModules>
+      <Resources FF="234" LUT="69"/>
+      <LocalResources FF="233" LUT="33"/>
+    </RtlModule>
+    <RtlModule CELL="inst/read_input_1_U0/flow_control_loop_pipe_U" DEPTH="2" TYPE="rtl" MODULENAME="flow_control_loop_pipe" DISPNAME="flow_control_loop_pipe_U" RTLNAME="vadd_flow_control_loop_pipe">
+      <Resources FF="1" LUT="36"/>
+    </RtlModule>
+    <RtlModule CELL="inst/read_input_U0" DEPTH="1" TYPE="function" MODULENAME="read_input" DISPNAME="read_input_U0" RTLNAME="vadd_read_input">
+      <SubModules count="1">grp_read_input_Pipeline_mem_rd_fu_82</SubModules>
+      <Resources FF="207" LUT="147"/>
+      <LocalResources FF="139" LUT="64"/>
+    </RtlModule>
+    <RtlModule CELL="inst/read_input_U0/grp_read_input_Pipeline_mem_rd_fu_82" DEPTH="2" TYPE="function" MODULENAME="read_input_Pipeline_mem_rd" DISPNAME="grp_read_input_Pipeline_mem_rd_fu_82" RTLNAME="vadd_read_input_Pipeline_mem_rd">
+      <SubModules count="1">flow_control_loop_pipe_sequential_init_U</SubModules>
+      <Resources FF="68" LUT="83"/>
+      <LocalResources FF="66" LUT="8"/>
+    </RtlModule>
+    <RtlModule CELL="inst/read_input_U0/grp_read_input_Pipeline_mem_rd_fu_82/flow_control_loop_pipe_sequential_init_U" DEPTH="3" TYPE="rtl" MODULENAME="flow_control_loop_pipe_sequential_init" DISPNAME="flow_control_loop_pipe_sequential_init_U" RTLNAME="vadd_flow_control_loop_pipe_sequential_init">
+      <Resources FF="2" LUT="75"/>
+    </RtlModule>
+    <RtlModule CELL="inst/size_c1_U" DEPTH="1" TYPE="resource" MODULENAME="fifo_w32_d2_S" DISPNAME="size_c1_U" RTLNAME="vadd_fifo_w32_d2_S">
+      <Resources FF="70" LUT="22"/>
+      <LocalResources FF="6" LUT="6"/>
+      <BindNode BINDTYPE="storage" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="srl" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="size_c1_U" SOURCE="src/vadd.cpp:113" STORAGESIZE="32 2 1" STORAGESUBTYPE="scalar prop" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="size_c1" VISIBLE="true"/>
+    </RtlModule>
+    <RtlModule CELL="inst/size_c_U" DEPTH="1" TYPE="resource" MODULENAME="fifo_w32_d2_S" DISPNAME="size_c_U" RTLNAME="vadd_fifo_w32_d2_S">
+      <Resources FF="70" LUT="42"/>
+      <LocalResources FF="6" LUT="9"/>
+      <BindNode BINDTYPE="storage" BRAM="0" BUNDLEDNAME="" DISPNAME="bind_storage fifo" DSP="0" ID="" IMPL="srl" LATENCY="0" LOOP="" OPTYPE="fifo" PRAGMA="" RTLNAME="size_c_U" SOURCE="src/vadd.cpp:113" STORAGESIZE="32 2 1" STORAGESUBTYPE="scalar prop" STORAGEUSAGE="fifo channel" URAM="0" VARIABLE="size_c" VISIBLE="true"/>
+    </RtlModule>
+    <RtlModule CELL="inst/start_for_compute_add_U0_U" DEPTH="1" TYPE="rtl" MODULENAME="start_for_compute_add_U0" DISPNAME="start_for_compute_add_U0_U" RTLNAME="vadd_start_for_compute_add_U0">
+      <Resources FF="4" LUT="4"/>
+    </RtlModule>
+    <RtlModule CELL="inst/start_for_write_result_U0_U" DEPTH="1" TYPE="rtl" MODULENAME="start_for_write_result_U0" DISPNAME="start_for_write_result_U0_U" RTLNAME="vadd_start_for_write_result_U0">
+      <Resources FF="5" LUT="8"/>
+    </RtlModule>
+    <RtlModule CELL="inst/write_result_U0" DEPTH="1" TYPE="function" MODULENAME="write_result" DISPNAME="write_result_U0" RTLNAME="vadd_write_result">
+      <SubModules count="1">grp_write_result_Pipeline_mem_wr_fu_73</SubModules>
+      <Resources FF="267" LUT="172"/>
+      <LocalResources FF="199" LUT="93"/>
+    </RtlModule>
+    <RtlModule CELL="inst/write_result_U0/grp_write_result_Pipeline_mem_wr_fu_73" DEPTH="2" TYPE="function" MODULENAME="write_result_Pipeline_mem_wr" DISPNAME="grp_write_result_Pipeline_mem_wr_fu_73" RTLNAME="vadd_write_result_Pipeline_mem_wr">
+      <SubModules count="1">flow_control_loop_pipe_sequential_init_U</SubModules>
+      <Resources FF="68" LUT="79"/>
+      <LocalResources FF="66" LUT="7"/>
+    </RtlModule>
+    <RtlModule CELL="inst/write_result_U0/grp_write_result_Pipeline_mem_wr_fu_73/flow_control_loop_pipe_sequential_init_U" DEPTH="3" TYPE="rtl" MODULENAME="flow_control_loop_pipe_sequential_init" DISPNAME="flow_control_loop_pipe_sequential_init_U" RTLNAME="vadd_flow_control_loop_pipe_sequential_init">
+      <Resources FF="2" LUT="72"/>
+    </RtlModule>
+  </RtlModules>
+  <TimingPaths>
+    <TPATH DATAPATH_DELAY="3.111" DATAPATH_LOGIC_DELAY="0.195" DATAPATH_NET_DELAY="2.916" ENDPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][53]_srl32/CE" LOGIC_LEVELS="1" MAX_FANOUT="294" SLACK="3.356" STARTPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg/C">
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg" PRIMITIVE_TYPE="REGISTER.SDR.FDRE" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2702" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <CELL NAME="write_result_U0/mem_reg[68][0]_srl32_i_1__1" PRIMITIVE_TYPE="CLB.LUT.LUT2" FILE_NAME="vadd_flow_control_loop_pipe_sequential_init.v" LINE_NUMBER="69" MODULE_INSTNAME="write_result_U0" IS_FUNCINST="0"/>
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][53]_srl32" PRIMITIVE_TYPE="CLB.SRL.SRLC32E" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2782" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <MODULE_INSTANCES>gmem0_m_axi_U write_result_U0</MODULE_INSTANCES>
+    </TPATH>
+    <TPATH DATAPATH_DELAY="3.111" DATAPATH_LOGIC_DELAY="0.195" DATAPATH_NET_DELAY="2.916" ENDPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][53]_srl32__0/CE" LOGIC_LEVELS="1" MAX_FANOUT="294" SLACK="3.356" STARTPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg/C">
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg" PRIMITIVE_TYPE="REGISTER.SDR.FDRE" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2702" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <CELL NAME="write_result_U0/mem_reg[68][0]_srl32_i_1__1" PRIMITIVE_TYPE="CLB.LUT.LUT2" FILE_NAME="vadd_flow_control_loop_pipe_sequential_init.v" LINE_NUMBER="69" MODULE_INSTNAME="write_result_U0" IS_FUNCINST="0"/>
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][53]_srl32__0" PRIMITIVE_TYPE="CLB.SRL.SRLC32E" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2782" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <MODULE_INSTANCES>gmem0_m_axi_U write_result_U0</MODULE_INSTANCES>
+    </TPATH>
+    <TPATH DATAPATH_DELAY="3.103" DATAPATH_LOGIC_DELAY="0.195" DATAPATH_NET_DELAY="2.908" ENDPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][49]_srl32__1/CE" LOGIC_LEVELS="1" MAX_FANOUT="294" SLACK="3.364" STARTPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg/C">
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg" PRIMITIVE_TYPE="REGISTER.SDR.FDRE" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2702" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <CELL NAME="write_result_U0/mem_reg[68][0]_srl32_i_1__1" PRIMITIVE_TYPE="CLB.LUT.LUT2" FILE_NAME="vadd_flow_control_loop_pipe_sequential_init.v" LINE_NUMBER="69" MODULE_INSTNAME="write_result_U0" IS_FUNCINST="0"/>
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][49]_srl32__1" PRIMITIVE_TYPE="CLB.SRL.SRLC32E" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2782" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <MODULE_INSTANCES>gmem0_m_axi_U write_result_U0</MODULE_INSTANCES>
+    </TPATH>
+    <TPATH DATAPATH_DELAY="3.103" DATAPATH_LOGIC_DELAY="0.195" DATAPATH_NET_DELAY="2.908" ENDPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][52]_srl32/CE" LOGIC_LEVELS="1" MAX_FANOUT="294" SLACK="3.364" STARTPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg/C">
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg" PRIMITIVE_TYPE="REGISTER.SDR.FDRE" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2702" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <CELL NAME="write_result_U0/mem_reg[68][0]_srl32_i_1__1" PRIMITIVE_TYPE="CLB.LUT.LUT2" FILE_NAME="vadd_flow_control_loop_pipe_sequential_init.v" LINE_NUMBER="69" MODULE_INSTNAME="write_result_U0" IS_FUNCINST="0"/>
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][52]_srl32" PRIMITIVE_TYPE="CLB.SRL.SRLC32E" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2782" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <MODULE_INSTANCES>gmem0_m_axi_U write_result_U0</MODULE_INSTANCES>
+    </TPATH>
+    <TPATH DATAPATH_DELAY="3.103" DATAPATH_LOGIC_DELAY="0.195" DATAPATH_NET_DELAY="2.908" ENDPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][52]_srl32__0/CE" LOGIC_LEVELS="1" MAX_FANOUT="294" SLACK="3.364" STARTPOINT_PIN="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg/C">
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/full_n_reg" PRIMITIVE_TYPE="REGISTER.SDR.FDRE" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2702" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <CELL NAME="write_result_U0/mem_reg[68][0]_srl32_i_1__1" PRIMITIVE_TYPE="CLB.LUT.LUT2" FILE_NAME="vadd_flow_control_loop_pipe_sequential_init.v" LINE_NUMBER="69" MODULE_INSTNAME="write_result_U0" IS_FUNCINST="0"/>
+      <CELL NAME="gmem0_m_axi_U/store_unit_0/fifo_wreq/U_fifo_srl/mem_reg[68][52]_srl32__0" PRIMITIVE_TYPE="CLB.SRL.SRLC32E" FILE_NAME="vadd_gmem0_m_axi.v" LINE_NUMBER="2782" MODULE_INSTNAME="gmem0_m_axi_U" IS_FUNCINST="0"/>
+      <MODULE_INSTANCES>gmem0_m_axi_U write_result_U0</MODULE_INSTANCES>
+    </TPATH>
+  </TimingPaths>
+  <VivadoReportFiles>
+    <ReportFile TYPE="design_analysis" PATH="verilog/report/vadd_design_analysis_routed.rpt"/>
+    <ReportFile TYPE="failfast" PATH="verilog/report/vadd_failfast_routed.rpt"/>
+    <ReportFile TYPE="power" PATH="verilog/report/vadd_power_routed.rpt"/>
+    <ReportFile TYPE="status" PATH="verilog/report/vadd_status_routed.rpt"/>
+    <ReportFile TYPE="timing" PATH="verilog/report/vadd_timing_routed.rpt"/>
+    <ReportFile TYPE="timing_paths" PATH="verilog/report/vadd_timing_paths_routed.rpt"/>
+    <ReportFile TYPE="utilization" PATH="verilog/report/vadd_utilization_routed.rpt"/>
+    <ReportFile TYPE="utilization_hierarchical" PATH="verilog/report/vadd_utilization_hierarchical_routed.rpt"/>
+  </VivadoReportFiles>
+  <GeneralInfo NAME="General Information">
+    <item NAME="Date" VALUE="Wed Feb 26 23:43:42 WET 2025"/>
+    <item NAME="Version" VALUE="2024.2 (Build 5238294 on Nov  8 2024)"/>
+    <item NAME="Project" VALUE="vadd"/>
+    <item NAME="Solution" VALUE="hls (Vitis Kernel Flow Target)"/>
+    <item NAME="Product family" VALUE="zynquplus"/>
+    <item NAME="Target device" VALUE="xczu9eg-ffvb1156-2-e"/>
+  </GeneralInfo>
+  <RunOptions NAME="Run Constraints &amp; Options">
+    <General NAME="Design Constraints &amp; Options">
+      <item NAME="Place &amp; Route target clock" VALUE="6.667 ns"/>
+      <item NAME="C-Synthesis target clock" VALUE="6.667 ns"/>
+      <item NAME="C-Synthesis uncertainty" VALUE="27%"/>
+      <item NAME="config_export -ip_xdc_file" VALUE=""/>
+      <item NAME="config_export -ip_xdc_ooc_file" VALUE=""/>
+    </General>
+    <Syn NAME="RTL Synthesis Options">
+      <item NAME="config_export -vivado_synth_strategy" VALUE="default"/>
+      <item NAME="config_export -vivado_synth_design_args" VALUE="-directive sdx_optimization_effort_high"/>
+    </Syn>
+    <Impl NAME="Place &amp; Route Options">
+      <item NAME="config_export -vivado_impl_strategy" VALUE="default"/>
+      <item NAME="config_export -vivado_phys_opt" VALUE="auto"/>
+      <item NAME="config_export -vivado_pblock" VALUE=""/>
+    </Impl>
+    <Reporting NAME="Reporting Options">
+      <item NAME="config_export -vivado_report_level" VALUE="2"/>
+      <item NAME="config_export -vivado_max_timing_paths" VALUE="10"/>
+    </Reporting>
+  </RunOptions>
+</profile>
+

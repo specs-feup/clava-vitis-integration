@@ -3,7 +3,7 @@ import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
 import { HlsConfig, NullConfig } from "./HlsConfig.js";
 import chalk from 'chalk';
 import { HlsReportParser } from "./HlsReportParser.js";
-import { HlsReport } from "./HlsReport.js";
+import { VitisImplReport, VitisSynReport } from "./HlsReport.js";
 
 export enum VppMode {
     SYN = "synthesis",
@@ -44,20 +44,20 @@ export class VitisHls {
         return this;
     }
 
-    public synthesize(timestamped: boolean = true, silent: boolean = false): HlsReport {
+    public synthesize(timestamped: boolean = true, silent: boolean = false): VitisSynReport {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
         const workingDir = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
         this.cleanup(workingDir);
 
-        return this.parseReport(workingDir);
+        return this.parseSynthesisReport(workingDir);
     }
 
-    public implement(timestamped: boolean = true, silent: boolean = false): HlsReport {
+    public implement(timestamped: boolean = true, silent: boolean = false): VitisImplReport {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
         const workingDir = this.runVpp(VppMode.IMPL, cfgPath, fullProjName, silent);
         this.cleanup(workingDir);
 
-        return this.parseReport(workingDir);
+        return this.parseImplementationReport(workingDir);
     }
 
     public createWorkspace(timestamped: boolean): [string, string] {
@@ -123,11 +123,23 @@ export class VitisHls {
         }
     }
 
-    private parseReport(path: string): HlsReport {
+    private parseSynthesisReport(path: string): VitisSynReport {
         const reportPath = `${path}/hls/syn/report/csynth.xml`;
 
         if (!Io.isFile(reportPath)) {
-            this.log(`Report file not found at ${reportPath}, likely due to an error during synthesis.`);
+            this.log(`Report file not found at ${reportPath}, likely due to an error during synthesis`);
+            return HlsReportParser.emptyReport();
+        }
+
+        const parser = new HlsReportParser();
+        return parser.parseReport(reportPath);
+    }
+
+    private parseImplementationReport(path: string): VitisImplReport {
+        const reportPath = `${path}/hls/impl/report/verilog/export_impl.xml`;
+
+        if (!Io.isFile(reportPath)) {
+            this.log(`Report file not found at ${reportPath}, likely due to an error during implementation`);
             return HlsReportParser.emptyReport();
         }
 

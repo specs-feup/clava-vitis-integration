@@ -35,22 +35,10 @@ export type VitisSynReport = {
 }
 
 export type VitisImplReport = {
-    platform: string | AmdPlatform,
-    topFunction: string,
+    vivadoVersion: string,
 
     clockTarget: Clock,
-    clockTargetUncertainty: Uncertainty,
-    clockEstim: Clock,
-    frequencyMaxMHz: number,
-
-    latencyWorst: number,
-    latencyAvg: number,
-    latencyBest: number,
-    hasFixedLatency: boolean,
-
-    execTimeWorst: ExecTime,
-    execTimeAvg: ExecTime,
-    execTimeBest: ExecTime,
+    clockAchieved: Clock,
 
     FF: number,
     LUT: number,

@@ -1,7 +1,7 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import { XMLParser } from "fast-xml-parser";
-import { ClockUnit, UncertaintyUnit } from "./VitisHlsConfig.js";
-import { TimeUnit, VitisImplReport, VitisSynReport } from "./VitisReports.js";
+import { ClockUnit } from "./VitisHlsConfig.js";
+import { VitisImplReport } from "./VitisReports.js";
 
 export class VitisImplReportParser {
     constructor() { }
@@ -12,47 +12,26 @@ export class VitisImplReportParser {
         const parser = new XMLParser();
         const json = parser.parse(reportData);
 
-        const period = json.profile.PerformanceEstimates.SummaryOfTimingAnalysis.EstimatedClockPeriod;
-        const freqMHz = (1 / period) * 1e3;
-        const hasFixedLatency = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Worst-caseLatency"] ===
-            json.profile.PerformanceEstimates.SummaryOfOverallLatency["Best-caseLatency"];
-
-        const execWorst = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Worst-caseRealTimeLatency"].split(" ") as string[];
-        const execAvg = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Average-caseRealTimeLatency"].split(" ") as string[];
-        const execBest = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Best-caseRealTimeLatency"].split(" ") as string[];
-
         const report: VitisImplReport = {
-            platform: json.profile.UserAssignments.Part,
-            topFunction: json.profile.UserAssignments.TopModelName,
+            vivadoVersion: json.profile.RunData.VIVADO_VERSION,
 
-            clockTarget: { value: json.profile.UserAssignments.TargetClockPeriod, unit: ClockUnit.NANOSECOND },
-            clockTargetUncertainty: { value: json.profile.UserAssignments.ClockUncertainty, unit: UncertaintyUnit.NANOSECOND },
-            clockEstim: { value: json.profile.PerformanceEstimates.SummaryOfTimingAnalysis.EstimatedClockPeriod, unit: ClockUnit.NANOSECOND },
-            frequencyMaxMHz: freqMHz,
+            clockTarget: { value: json.profile.TimingReport.TargetClockPeriod, unit: ClockUnit.NANOSECOND },
+            clockAchieved: { value: json.profile.TimingReport.AchievedClockPeriod, unit: ClockUnit.NANOSECOND },
 
-            latencyWorst: json.profile.PerformanceEstimates.SummaryOfOverallLatency["Worst-caseLatency"],
-            latencyAvg: json.profile.PerformanceEstimates.SummaryOfOverallLatency["Average-caseLatency"],
-            latencyBest: json.profile.PerformanceEstimates.SummaryOfOverallLatency["Best-caseLatency"],
-            hasFixedLatency: hasFixedLatency,
+            FF: json.profile.AreaReport.Resources.FF,
+            LUT: json.profile.AreaReport.Resources.LUT,
+            BRAM: json.profile.AreaReport.Resources.BRAM,
+            DSP: json.profile.AreaReport.Resources.DSP,
 
-            execTimeWorst: { value: Number(execWorst[0]), unit: execWorst[1].trim() as TimeUnit },
-            execTimeAvg: { value: Number(execAvg[0]), unit: execAvg[1].trim() as TimeUnit },
-            execTimeBest: { value: Number(execBest[0]), unit: execBest[1].trim() as TimeUnit },
+            availFF: json.profile.AreaReport.AvailableResources.FF,
+            availLUT: json.profile.AreaReport.AvailableResources.LUT,
+            availBRAM: json.profile.AreaReport.AvailableResources.BRAM,
+            availDSP: json.profile.AreaReport.AvailableResources.DSP,
 
-            FF: json.profile.AreaEstimates.Resources.FF,
-            LUT: json.profile.AreaEstimates.Resources.LUT,
-            BRAM: json.profile.AreaEstimates.Resources.BRAM_18K,
-            DSP: json.profile.AreaEstimates.Resources.DSP,
-
-            availFF: json.profile.AreaEstimates.AvailableResources.FF,
-            availLUT: json.profile.AreaEstimates.AvailableResources.LUT,
-            availBRAM: json.profile.AreaEstimates.AvailableResources.BRAM_18K,
-            availDSP: json.profile.AreaEstimates.AvailableResources.DSP,
-
-            perFF: json.profile.AreaEstimates.Resources.FF / json.profile.AreaEstimates.AvailableResources.FF,
-            perLUT: json.profile.AreaEstimates.Resources.LUT / json.profile.AreaEstimates.AvailableResources.LUT,
-            perBRAM: json.profile.AreaEstimates.Resources.BRAM_18K / json.profile.AreaEstimates.AvailableResources.BRAM_18K,
-            perDSP: json.profile.AreaEstimates.Resources.DSP / json.profile.AreaEstimates.AvailableResources.DSP
+            perFF: json.profile.AreaReport.Resources.FF / json.profile.AreaReport.AvailableResources.FF,
+            perLUT: json.profile.AreaReport.Resources.LUT / json.profile.AreaReport.AvailableResources.LUT,
+            perBRAM: json.profile.AreaReport.Resources.BRAM / json.profile.AreaReport.AvailableResources.BRAM,
+            perDSP: json.profile.AreaReport.Resources.DSP / json.profile.AreaReport.AvailableResources.DSP
         };
 
         return report;
@@ -60,22 +39,10 @@ export class VitisImplReportParser {
 
     public static emptyReport(): VitisImplReport {
         const report: VitisImplReport = {
-            platform: "<no_platform>",
-            topFunction: "<no_function>",
+            vivadoVersion: "<no_version>",
 
-            clockTarget: { value: -1, unit: ClockUnit.NANOSECOND },
-            clockTargetUncertainty: { value: -1, unit: UncertaintyUnit.NANOSECOND },
-            clockEstim: { value: -1, unit: ClockUnit.NANOSECOND },
-            frequencyMaxMHz: -1,
-
-            latencyWorst: -1,
-            latencyAvg: -1,
-            latencyBest: -1,
-            hasFixedLatency: true,
-
-            execTimeWorst: { value: -1, unit: TimeUnit.MICROSECOND },
-            execTimeAvg: { value: -1, unit: TimeUnit.MICROSECOND },
-            execTimeBest: { value: -1, unit: TimeUnit.MICROSECOND },
+            clockTarget: { value: 0, unit: ClockUnit.NANOSECOND },
+            clockAchieved: { value: 0, unit: ClockUnit.NANOSECOND },
 
             FF: -1,
             LUT: -1,
@@ -96,7 +63,28 @@ export class VitisImplReportParser {
     }
 
     public static prettyPrintReport(report: VitisImplReport): string {
-        const out = `${'-'.repeat(20)}`;
+        const out = `${'-'.repeat(20)}
+Vitis Implementation Report
+${'-'.repeat(20)}
+Vivado version: ${report.vivadoVersion}
+Target Clock: ${report.clockTarget.value} ${report.clockTarget.unit}
+Achieved Clock: ${report.clockAchieved.value} ${report.clockAchieved.unit}
+${'-'.repeat(20)}
+Used FF: ${report.FF} 
+Used LUT: ${report.LUT} 
+Used BRAM: ${report.BRAM} 
+Used DSP: ${report.DSP} 
+${'-'.repeat(20)}
+Available FF: ${report.availFF} 
+Available LUT: ${report.availLUT} 
+Available BRAM: ${report.availBRAM} 
+Available DSP: ${report.availDSP} 
+${'-'.repeat(20)}
+FF %: ${(Math.round(report.perFF * 100)).toFixed(2)}% 
+LUT %: ${(Math.round(report.perLUT * 100)).toFixed(2)}% 
+BRAM %: ${(Math.round(report.perBRAM * 100)).toFixed(2)}% 
+DSP %: ${(Math.round(report.perDSP * 100)).toFixed(2)}% 
+${'-'.repeat(20)}`;
 
         console.log(out);
         return out;

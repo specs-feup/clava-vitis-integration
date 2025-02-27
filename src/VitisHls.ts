@@ -4,6 +4,7 @@ import { VitisHlsConfig, NullConfig } from "./VitisHlsConfig.js";
 import chalk from 'chalk';
 import { VitisSynReportParser } from "./VitisSynReportParser.js";
 import { VitisImplReport, VitisSynReport } from "./VitisReports.js";
+import { VitisImplReportParser } from "./VitisImplReportParser.js";
 
 export enum VppMode {
     SYN = "synthesis",
@@ -140,10 +141,10 @@ export class VitisHls {
 
         if (!Io.isFile(reportPath)) {
             this.log(`Report file not found at ${reportPath}, likely due to an error during implementation`);
-            return VitisSynReportParser.emptyReport();
+            return VitisImplReportParser.emptyReport();
         }
 
-        const parser = new VitisSynReportParser();
+        const parser = new VitisImplReportParser();
         return parser.parseReport(reportPath);
     }
 }

@@ -1,7 +1,7 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import { XMLParser } from "fast-xml-parser";
-import { ClockUnit, UncertaintyUnit } from "./HlsConfig.js";
-import { TimeUnit, VitisSynReport } from "./HlsReport.js";
+import { ClockUnit, UncertaintyUnit } from "./VitisHlsConfig.js";
+import { TimeUnit, VitisSynReport } from "./VitisReports.js";
 
 export class HlsReportParser {
     constructor() { }

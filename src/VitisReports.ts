@@ -1,4 +1,4 @@
-import { AmdPlatform, Clock, Uncertainty } from "./HlsConfig.js"
+import { AmdPlatform, Clock, Uncertainty } from "./VitisHlsConfig.js"
 
 export type VitisSynReport = {
     platform: string | AmdPlatform,

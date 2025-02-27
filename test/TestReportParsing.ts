@@ -1,4 +1,4 @@
-import { HlsReportParser } from "../src/HlsReportParser.js";
+import { HlsReportParser } from "../src/VitisSynReportParser.js";
 
 const parser = new HlsReportParser();
 

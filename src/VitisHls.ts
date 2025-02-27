@@ -1,9 +1,9 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import ProcessExecutor from "@specs-feup/lara/api/lara/util/ProcessExecutor.js";
-import { HlsConfig, NullConfig } from "./HlsConfig.js";
+import { HlsConfig, NullConfig } from "./VitisHlsConfig.js";
 import chalk from 'chalk';
-import { HlsReportParser } from "./HlsReportParser.js";
-import { VitisImplReport, VitisSynReport } from "./HlsReport.js";
+import { HlsReportParser } from "./VitisSynReportParser.js";
+import { VitisImplReport, VitisSynReport } from "./VitisReports.js";
 
 export enum VppMode {
     SYN = "synthesis",

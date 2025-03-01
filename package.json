@@ -1,7 +1,7 @@
 {
-  "name": "clava-vitis-integration",
+  "name": "@specs-feup/clava-vitis-integration",
   "version": "1.0.0",
-  "author": "tiagolascasas",
+  "author": "Tiago Lascasas Santos <tiagolascasas@outlook.com> (https://tiagolascasas.dev)",
   "description": "A Clava extension to interact with AMD/Xilinx's Vitis ",
   "type": "module",
   "scripts": {
@@ -29,8 +29,11 @@
     "./HlsPipeline": "./dist/src/directives/HlsPipeline.js",
     "./HlsUnroll": "./dist/src/directives/HlsUnroll.js"
   },
+  "files": [
+    "inputs/"
+  ],
   "dependencies": {
-    "@specs-feup/clava": "^3.0.1",
+    "@specs-feup/clava": "^3.0.8",
     "chalk": "^5.3.0",
     "fast-xml-parser": "^4.5.0"
   },

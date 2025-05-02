@@ -4,6 +4,7 @@
   "author": "Tiago Lascasas Santos <tiagolascasas@outlook.com> (https://tiagolascasas.dev)",
   "description": "A Clava extension to interact with AMD/Xilinx's Vitis ",
   "type": "module",
+  "private": false,
   "scripts": {
     "test:proj": "clava dist/test/TestSingleFileProject.js -- clang inputs/scenarioA",
     "test:syn": "clava dist/test/TestSingleFileSynthesis.js -- clang inputs/scenarioB.cpp",
@@ -30,7 +31,7 @@
     "./HlsUnroll": "./dist/src/directives/HlsUnroll.js"
   },
   "files": [
-    "inputs/"
+    "dist/src"
   ],
   "dependencies": {
     "@specs-feup/clava": "^3.0.8",
@@ -51,5 +52,9 @@
     "ts-jest": "^29.2.2",
     "typedoc": "^0.26.4",
     "typescript": "^5.5.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/specs-feup/clava-vitis-integration.git"
   }
 }

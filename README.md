@@ -1,32 +1,45 @@
-# clava-project-template
+# clava-vitis-integration
 
-A template for developing projects for Clava in Typescript
+An extension of the [Clava C/C++ source-to-source compiler](https://github.com/specs-feup/clava) to programatically synthesize functions obtained from the AST using Vitis HLS
 
-## Installing dev environment
+## How to install
 
-Execute the following commands to download all the required code:
+This package is [available on NPM](https://www.npmjs.com/package/@specs-feup/clava-vitis-integration). Assuming you already have a [Clava-based NPM project](https://github.com/specs-feup/clava-project-template) setup, you can install the latest stable release with:
 
 ```bash
-npm install
+npm install @specs-feup/clava-vitis-integration@latest
 ```
 
-## Executing Clava
-
-You can execute your project in Clava by running the following on your terminal
+If you want to use unstable and experimental features, use the `staging` or `nightly` tags instead, as they are both built using the most recent commit in the repository. Nightly builds are built automatically every day, while staging builds are built on-demand:
 
 ```bash
-npm run run
+npm install @specs-feup/clava-vitis-integration@nightly
 ```
 
-Take a look inside the `scripts` field in the `package.json` file for more information.
+# Basic usage
 
-You can also run tests, get test coverage information and generate documentation for your project.
+To synthesize a function and obtain the synthesis report, you can do something like:
 
-## Debugging
+```TypeScript
+import Query from "@specs-feup/lara/api/weaver/Query.js";
+import { FileJp } from "@specs-feup/clava/api/Joinpoints.js";
+import { AmdPlatform, ClockUnit, OutputFormat, UncertaintyUnit, VitisHlsConfig } from "@specs-feup/clava-vitis-integration/VitisHlsConfig";
+import { VitisHls } from "@specs-feup/clava-vitis-integration/VitisHls";
 
-You can get debugging information using a `DEBUG` environment variable.
-This variable is used by the [debug](https://www.npmjs.com/package/debug) module to determine what to expose.
+const vitis = new VitisHls();
 
-```bash
-DEBUG="*" npm run run
+const config = new VitisHlsConfig("rgbToGrayscale")
+    .setClock({ value: 100, unit: ClockUnit.MEGAHERTZ })
+    .setUncertainty({ value: 2, unit: UncertaintyUnit.NANOSECOND })
+    .setPlatform(AmdPlatform.ZCU102)
+    .setOutputFormat(OutputFormat.VITIS_XO);
+vitis.setConfig(config);
+
+// RTL synthesis (report with resource usage estimations)
+const synReport = vitis.synthesize();
+console.log(synReport);
+
+// Place and route (report with actual resource usage)
+const placeRouteReport = vitis.implement();
+console.log(placeRouteReport);
 ```

@@ -135,6 +135,7 @@ export class VitisHls {
         if (!Io.isFile(reportPath)) {
             this.log(`Report file not found at ${reportPath}, likely due to an error during synthesis`);
             const emptyReport = VitisSynReportParser.emptyReport();
+            emptyReport.topFunction = this.config.getTopFunction();
             emptyReport.errors = errors;
             return emptyReport;
         }
@@ -163,19 +164,24 @@ export class VitisHls {
     }
 
     private getErrors(vitisOutput: string): string[] {
+        const toIgnore = [
+            "Syn check fail!",
+            "Encountered problem during source synthesis",
+            "Pre-synthesis failed."
+        ]
         const errors: string[] = [];
 
         const lines = vitisOutput.split("\n");
         for (const line of lines) {
             if (line.startsWith("ERROR: ")) {
-                const unprefixedLine = line.replace("ERROR: ", "");
-                if (unprefixedLine.includes("]")) {
-                    const msg = line.split("]")[1].trim();
+                let msg = line.replace("ERROR: ", "");
+                if (msg.includes("]")) {
+                    msg = line.split("]")[1].trim();
+                }
+                if (!toIgnore.some(ignore => msg.includes(ignore))) {
                     errors.push(msg);
                 }
-                else {
-                    errors.push(unprefixedLine);
-                }
+
             }
         }
         return errors;

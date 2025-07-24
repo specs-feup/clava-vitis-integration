@@ -79,6 +79,7 @@ export class VitisSynReportParser {
             perBRAM: json.profile.AreaEstimates.Resources.BRAM_18K / json.profile.AreaEstimates.AvailableResources.BRAM_18K,
             perDSP: json.profile.AreaEstimates.Resources.DSP / json.profile.AreaEstimates.AvailableResources.DSP,
 
+            valid: true,
             errors: []
         };
 
@@ -119,6 +120,7 @@ export class VitisSynReportParser {
             perBRAM: -1,
             perDSP: -1,
 
+            valid: false,
             errors: []
         };
         return report;

@@ -33,6 +33,7 @@ export type VitisSynReport = {
     perBRAM: number,
     perDSP: number,
 
+    valid: boolean,
     errors: string[]
 }
 
@@ -57,6 +58,7 @@ export type VitisImplReport = {
     perBRAM: number,
     perDSP: number,
 
+    valid: boolean,
     errors: string[]
 }
 

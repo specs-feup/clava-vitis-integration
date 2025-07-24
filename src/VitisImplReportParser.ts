@@ -33,6 +33,7 @@ export class VitisImplReportParser {
             perBRAM: json.profile.AreaReport.Resources.BRAM / json.profile.AreaReport.AvailableResources.BRAM,
             perDSP: json.profile.AreaReport.Resources.DSP / json.profile.AreaReport.AvailableResources.DSP,
 
+            valid: true,
             errors: []
         };
 
@@ -61,6 +62,7 @@ export class VitisImplReportParser {
             perBRAM: -1,
             perDSP: -1,
 
+            valid: false,
             errors: []
         };
         return report;

@@ -15,6 +15,7 @@
     "test:edgedetect-impl": "clava dist/test/TestEdgedetectImpl.js -- clang inputs/edgedetect",
     "test:pragmas": "clava dist/test/TestDirectiveInsertion.js -- clang inputs/edgedetect",
     "test:pragmas-syn": "clava dist/test/TestDirectiveSynthesis.js -- clang inputs/edgedetect",
+    "test:unsynthesis": "clava dist/test/TestUnsynthesizability.js -- clang inputs/unsynthesizable",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint .",

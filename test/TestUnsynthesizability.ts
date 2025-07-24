@@ -2,6 +2,9 @@ import { FileJp, FunctionJp } from "@specs-feup/clava/api/Joinpoints.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import { AmdPlatform, ClockUnit, OutputFormat, UncertaintyUnit, VitisHlsConfig } from "../src/VitisHlsConfig.js";
 import { VitisHls } from "../src/VitisHls.js";
+import { VitisSynReport } from "../src/VitisReports.js";
+
+const reports: VitisSynReport[] = [];
 
 for (const fun of Query.search(FunctionJp, { isImplementation: true })) {
     if (fun.name === "main") {
@@ -24,4 +27,11 @@ for (const fun of Query.search(FunctionJp, { isImplementation: true })) {
     const report = vitis.synthesize();
 
     console.log(report);
+    reports.push(report);
+}
+
+for (const report of reports) {
+    console.log("Function:", report.topFunction);
+    console.log(report.errors.length > 0 ? report.errors.join("\n") : "No errors");
+    console.log("------");
 }

@@ -47,18 +47,22 @@ export class VitisHls {
 
     public synthesize(timestamped: boolean = true, silent: boolean = false): VitisSynReport {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
-        const workingDir = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
+        const vitisOutput = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
+
+        const workingDir = `${this.outputDir}/${fullProjName}`;
         this.cleanup(workingDir);
 
-        return this.parseSynthesisReport(workingDir);
+        return this.parseSynthesisReport(workingDir, vitisOutput);
     }
 
     public implement(timestamped: boolean = true, silent: boolean = false): VitisImplReport {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
-        const workingDir = this.runVpp(VppMode.IMPL, cfgPath, fullProjName, silent);
+        const vitisOutput = this.runVpp(VppMode.IMPL, cfgPath, fullProjName, silent);
+
+        const workingDir = `${this.outputDir}/${fullProjName}`;
         this.cleanup(workingDir);
 
-        return this.parseImplementationReport(workingDir);
+        return this.parseImplementationReport(workingDir, vitisOutput);
     }
 
     public createWorkspace(timestamped: boolean): [string, string] {
@@ -115,7 +119,7 @@ export class VitisHls {
         this.log(`v++ exit code: ${ret}`);
         this.log('-'.repeat(50));
 
-        return workingDir;
+        return ret || "";
     }
 
     private cleanup(workingDir: string): void {
@@ -124,27 +128,56 @@ export class VitisHls {
         }
     }
 
-    private parseSynthesisReport(path: string): VitisSynReport {
+    private parseSynthesisReport(path: string, vitisOutput: string): VitisSynReport {
         const reportPath = `${path}/hls/syn/report/csynth.xml`;
+        const errors = this.getErrors(vitisOutput);
 
         if (!Io.isFile(reportPath)) {
             this.log(`Report file not found at ${reportPath}, likely due to an error during synthesis`);
-            return VitisSynReportParser.emptyReport();
+            const emptyReport = VitisSynReportParser.emptyReport();
+            emptyReport.errors = errors;
+            return emptyReport;
         }
 
         const parser = new VitisSynReportParser();
-        return parser.parseReport(reportPath);
+        const report = parser.parseReport(reportPath);
+        report.errors = errors;
+        return report;
     }
 
-    private parseImplementationReport(path: string): VitisImplReport {
+    private parseImplementationReport(path: string, vitisOutput: string): VitisImplReport {
         const reportPath = `${path}/hls/impl/report/verilog/export_impl.xml`;
+        const errors = this.getErrors(vitisOutput);
 
         if (!Io.isFile(reportPath)) {
             this.log(`Report file not found at ${reportPath}, likely due to an error during implementation`);
-            return VitisImplReportParser.emptyReport();
+            const emptyReport = VitisImplReportParser.emptyReport();
+            emptyReport.errors = errors;
+            return emptyReport;
         }
 
         const parser = new VitisImplReportParser();
-        return parser.parseReport(reportPath);
+        const report = parser.parseReport(reportPath);
+        report.errors = errors;
+        return report;
+    }
+
+    private getErrors(vitisOutput: string): string[] {
+        const errors: string[] = [];
+
+        const lines = vitisOutput.split("\n");
+        for (const line of lines) {
+            if (line.startsWith("ERROR: ")) {
+                const unprefixedLine = line.replace("ERROR: ", "");
+                if (unprefixedLine.includes("]")) {
+                    const msg = line.split("]")[1].trim();
+                    errors.push(msg);
+                }
+                else {
+                    errors.push(unprefixedLine);
+                }
+            }
+        }
+        return errors;
     }
 }

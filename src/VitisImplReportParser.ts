@@ -31,7 +31,9 @@ export class VitisImplReportParser {
             perFF: json.profile.AreaReport.Resources.FF / json.profile.AreaReport.AvailableResources.FF,
             perLUT: json.profile.AreaReport.Resources.LUT / json.profile.AreaReport.AvailableResources.LUT,
             perBRAM: json.profile.AreaReport.Resources.BRAM / json.profile.AreaReport.AvailableResources.BRAM,
-            perDSP: json.profile.AreaReport.Resources.DSP / json.profile.AreaReport.AvailableResources.DSP
+            perDSP: json.profile.AreaReport.Resources.DSP / json.profile.AreaReport.AvailableResources.DSP,
+
+            errors: []
         };
 
         return report;
@@ -57,7 +59,9 @@ export class VitisImplReportParser {
             perFF: -1,
             perLUT: -1,
             perBRAM: -1,
-            perDSP: -1
+            perDSP: -1,
+
+            errors: []
         };
         return report;
     }

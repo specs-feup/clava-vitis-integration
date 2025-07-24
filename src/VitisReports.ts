@@ -31,7 +31,9 @@ export type VitisSynReport = {
     perFF: number,
     perLUT: number,
     perBRAM: number,
-    perDSP: number
+    perDSP: number,
+
+    errors: string[]
 }
 
 export type VitisImplReport = {
@@ -53,7 +55,9 @@ export type VitisImplReport = {
     perFF: number,
     perLUT: number,
     perBRAM: number,
-    perDSP: number
+    perDSP: number,
+
+    errors: string[]
 }
 
 export type ExecTime = {

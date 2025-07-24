@@ -77,7 +77,9 @@ export class VitisSynReportParser {
             perFF: json.profile.AreaEstimates.Resources.FF / json.profile.AreaEstimates.AvailableResources.FF,
             perLUT: json.profile.AreaEstimates.Resources.LUT / json.profile.AreaEstimates.AvailableResources.LUT,
             perBRAM: json.profile.AreaEstimates.Resources.BRAM_18K / json.profile.AreaEstimates.AvailableResources.BRAM_18K,
-            perDSP: json.profile.AreaEstimates.Resources.DSP / json.profile.AreaEstimates.AvailableResources.DSP
+            perDSP: json.profile.AreaEstimates.Resources.DSP / json.profile.AreaEstimates.AvailableResources.DSP,
+
+            errors: []
         };
 
         return report;
@@ -115,7 +117,9 @@ export class VitisSynReportParser {
             perFF: -1,
             perLUT: -1,
             perBRAM: -1,
-            perDSP: -1
+            perDSP: -1,
+
+            errors: []
         };
         return report;
     }

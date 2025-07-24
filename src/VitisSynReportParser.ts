@@ -18,8 +18,33 @@ export class VitisSynReportParser {
             json.profile.PerformanceEstimates.SummaryOfOverallLatency["Best-caseLatency"];
 
         const execWorst = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Worst-caseRealTimeLatency"].split(" ") as string[];
+        if (execWorst.length == 1 && execWorst[0] === "undef") {
+            execWorst[0] = "-1";
+            execWorst[1] = TimeUnit.MICROSECOND;
+        }
         const execAvg = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Average-caseRealTimeLatency"].split(" ") as string[];
+        if (execAvg.length == 1 && execAvg[0] === "undef") {
+            execAvg[0] = "-1";
+            execAvg[1] = TimeUnit.MICROSECOND;
+        }
         const execBest = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Best-caseRealTimeLatency"].split(" ") as string[];
+        if (execBest.length == 1 && execBest[0] === "undef") {
+            execBest[0] = "-1";
+            execBest[1] = TimeUnit.MICROSECOND;
+        }
+
+        let latencyWorst = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Worst-caseLatency"];
+        if (latencyWorst === "undef") {
+            latencyWorst = -1;
+        }
+        let latencyAvg = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Average-caseLatency"];
+        if (latencyAvg === "undef") {
+            latencyAvg = -1;
+        }
+        let latencyBest = json.profile.PerformanceEstimates.SummaryOfOverallLatency["Best-caseLatency"];
+        if (latencyBest === "undef") {
+            latencyBest = -1;
+        }
 
         const report: VitisSynReport = {
             platform: json.profile.UserAssignments.Part,
@@ -30,9 +55,9 @@ export class VitisSynReportParser {
             clockEstim: { value: json.profile.PerformanceEstimates.SummaryOfTimingAnalysis.EstimatedClockPeriod, unit: ClockUnit.NANOSECOND },
             frequencyMaxMHz: freqMHz,
 
-            latencyWorst: json.profile.PerformanceEstimates.SummaryOfOverallLatency["Worst-caseLatency"],
-            latencyAvg: json.profile.PerformanceEstimates.SummaryOfOverallLatency["Average-caseLatency"],
-            latencyBest: json.profile.PerformanceEstimates.SummaryOfOverallLatency["Best-caseLatency"],
+            latencyWorst: latencyWorst,
+            latencyAvg: latencyAvg,
+            latencyBest: latencyBest,
             hasFixedLatency: hasFixedLatency,
 
             execTimeWorst: { value: Number(execWorst[0]), unit: execWorst[1].trim() as TimeUnit },

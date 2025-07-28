@@ -73,3 +73,14 @@ export enum TimeUnit {
     MILLISECOND = "ms",
     SECOND = "s"
 }
+
+export function convertTimeUnit(value: number, from: TimeUnit, to: TimeUnit): number {
+    const conversionFactors: { [key in TimeUnit]: number } = {
+        [TimeUnit.NANOSECOND]: 1e-9,
+        [TimeUnit.MICROSECOND]: 1e-6,
+        [TimeUnit.MILLISECOND]: 1e-3,
+        [TimeUnit.SECOND]: 1
+    };
+
+    return value * conversionFactors[from] / conversionFactors[to];
+}

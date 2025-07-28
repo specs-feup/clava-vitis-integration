@@ -21,6 +21,6 @@ console.log(cfg);
 console.log("---------------------------------");
 
 const vitis = new VitisHls().setConfig(config);
-const report = vitis.synthesize();
+const report = vitis.synthesize(true, false, true);
 
 console.log(report);

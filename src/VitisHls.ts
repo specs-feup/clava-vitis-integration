@@ -45,24 +45,32 @@ export class VitisHls {
         return this;
     }
 
-    public synthesize(timestamped: boolean = true, silent: boolean = false): VitisSynReport {
+    public synthesize(timestamped: boolean = true, silent: boolean = false, deleteWorkspace: boolean = false): VitisSynReport {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
         const vitisOutput = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
 
         const workingDir = `${this.outputDir}/${fullProjName}`;
         this.cleanup(workingDir);
 
-        return this.parseSynthesisReport(workingDir, vitisOutput);
+        const report = this.parseSynthesisReport(workingDir, vitisOutput);
+        if (deleteWorkspace) {
+            this.deleteWorkspace(fullProjName);
+        }
+        return report;
     }
 
-    public implement(timestamped: boolean = true, silent: boolean = false): VitisImplReport {
+    public implement(timestamped: boolean = true, silent: boolean = false, deleteWorkspace: boolean = false): VitisImplReport {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
         const vitisOutput = this.runVpp(VppMode.IMPL, cfgPath, fullProjName, silent);
 
         const workingDir = `${this.outputDir}/${fullProjName}`;
         this.cleanup(workingDir);
 
-        return this.parseImplementationReport(workingDir, vitisOutput);
+        const report = this.parseImplementationReport(workingDir, vitisOutput);
+        if (deleteWorkspace) {
+            this.deleteWorkspace(fullProjName);
+        }
+        return report;
     }
 
     public createWorkspace(timestamped: boolean): [string, string] {
@@ -84,6 +92,15 @@ export class VitisHls {
         const cfgFilePath = Io.writeFile(`${relativePath}/hls_config.cfg`, cfg).getAbsolutePath();
 
         return [cfgFilePath, fullProjName];
+    }
+
+    public deleteWorkspace(fullProjName: string): void {
+        const relativePath = `${this.outputDir}/${fullProjName}`;
+        console.log(`Deleting workspace at ${relativePath}`);
+        if (Io.isFolder(relativePath)) {
+            Io.deleteFolder(relativePath);
+            this.log(`Deleted workspace at ${relativePath}`);
+        }
     }
 
     private log(msg: string): void {

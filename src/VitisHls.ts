@@ -96,7 +96,7 @@ export class VitisHls {
 
     public deleteWorkspace(fullProjName: string): void {
         const relativePath = `${this.outputDir}/${fullProjName}`;
-        console.log(`Deleting workspace at ${relativePath}`);
+
         if (Io.isFolder(relativePath)) {
             Io.deleteFolder(relativePath);
             this.log(`Deleted workspace at ${relativePath}`);

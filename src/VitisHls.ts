@@ -12,6 +12,7 @@ export enum VppMode {
 }
 
 export class VitisHls {
+    public static readonly HLS_TOOL = "v++";
     private readonly defaultState = { config: new NullConfig(), outputDir: "output_hls", projectName: "vpp_hls_run" };
     private config: VitisHlsConfig;
     private outputDir: string;
@@ -59,18 +60,28 @@ export class VitisHls {
         return report;
     }
 
-    public implement(timestamped: boolean = true, silent: boolean = false, deleteWorkspace: boolean = false): VitisImplReport {
+    public implement(timestamped: boolean = true, silent: boolean = false, deleteWorkspace: boolean = false): [VitisSynReport, VitisImplReport] {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
-        const vitisOutput = this.runVpp(VppMode.IMPL, cfgPath, fullProjName, silent);
-
         const workingDir = `${this.outputDir}/${fullProjName}`;
-        this.cleanup(workingDir);
 
-        const report = this.parseImplementationReport(workingDir, vitisOutput);
+        const synOutput = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
+        const synReport = this.parseSynthesisReport(`${this.outputDir}/${fullProjName}`, synOutput);
+        if (synReport.errors.length > 0) {
+            this.log("Synthesis errors detected, skipping implementation step.");
+            if (deleteWorkspace) {
+                this.deleteWorkspace(fullProjName);
+            }
+            return [synReport, VitisImplReportParser.emptyReport()];
+        }
+
+        const implOutput = this.runVpp(VppMode.IMPL, cfgPath, fullProjName, silent);
+        const implReport = this.parseImplementationReport(workingDir, implOutput);
+
         if (deleteWorkspace) {
             this.deleteWorkspace(fullProjName);
         }
-        return report;
+        this.cleanup(workingDir);
+        return [synReport, implReport];
     }
 
     public createWorkspace(timestamped: boolean): [string, string] {
@@ -110,13 +121,13 @@ export class VitisHls {
     private runVpp(mode: VppMode, configPath: string, fullProjName: string, silent: boolean = false): string {
         const workingDir = `${this.outputDir}/${fullProjName}`;
 
-        let command = "v++";
+        let command = "";
         switch (mode) {
             case VppMode.SYN:
-                command += ` -c --mode hls --config ${configPath} --work_dir ${workingDir}`;
+                command += `v++ --compile --mode hls --config ${configPath} --work_dir ${workingDir}`;
                 break;
             case VppMode.IMPL:
-                command += ` -c --mode hls --impl --config ${configPath} --work_dir ${workingDir}`;
+                command += `vitis-run --mode hls --impl --config ${configPath} --work_dir ${workingDir}`;
                 break;
             default:
                 throw new Error(`Invalid Vitis mode: ${mode}`);
@@ -133,7 +144,7 @@ export class VitisHls {
         const ret = vpp.execute(...command.split(" "));
 
         this.log(`Finished ${mode} at ${new Date().toISOString()}`);
-        this.log(`v++ exit code: ${ret}`);
+        this.log(`${VitisHls.HLS_TOOL} exit code: ${ret}`);
         this.log('-'.repeat(50));
 
         return ret || "";

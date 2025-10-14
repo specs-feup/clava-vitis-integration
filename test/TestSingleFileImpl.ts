@@ -21,6 +21,7 @@ console.log(cfg);
 console.log("---------------------------------");
 
 const vitis = new VitisHls().setConfig(config);
-const report = vitis.implement(true, false);
+const [synReport, implReport] = vitis.implement(true, false);
 
-console.log(report);
+console.log(synReport);
+console.log(implReport);

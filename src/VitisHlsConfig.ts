@@ -1,4 +1,5 @@
 import { FileJp } from "@specs-feup/clava/api/Joinpoints.js";
+import Clava from "@specs-feup/clava/api/clava/Clava.js";
 
 export class VitisHlsConfig {
     private topFunction: string;
@@ -61,6 +62,12 @@ export class VitisHlsConfig {
         return this;
     }
 
+    public addDefaultSources(): VitisHlsConfig {
+        const allFiles = Clava.getProgram().files;
+        allFiles.forEach(file => this.sources.add(file));
+        return this;
+    }
+
     public getTopFunction(): string {
         return this.topFunction;
     }
@@ -95,6 +102,7 @@ export class VitisHlsConfig {
 
     public generateConfigFile(): string {
         let files = "";
+
         for (const source of this.sources) {
             console.log(source.path);
             files = files.concat(`syn.file=${source.filename}\n`);

@@ -96,6 +96,11 @@ export class VitisHls {
         }
         Io.mkdir(relativePath);
 
+        if (this.config.getSources().length === 0) {
+            this.config.addDefaultSources();
+            this.log(`No source files specified in config; added all program files as sources.`);
+        }
+
         for (const file of this.config.getSources()) {
             file.write(relativePath);
         }

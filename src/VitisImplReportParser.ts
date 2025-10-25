@@ -1,7 +1,7 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import { XMLParser } from "fast-xml-parser";
 import { ClockUnit } from "./VitisHlsConfig.js";
-import { VitisImplReport } from "./VitisReports.js";
+import { getMachineSpecs, VitisImplReport } from "./VitisReports.js";
 
 export class VitisImplReportParser {
     constructor() { }
@@ -12,6 +12,7 @@ export class VitisImplReportParser {
         const parser = new XMLParser();
         const json = parser.parse(reportData);
 
+        const machine = getMachineSpecs();
         const report: VitisImplReport = {
             vivadoVersion: json.profile.RunData.VIVADO_VERSION,
 
@@ -34,13 +35,19 @@ export class VitisImplReportParser {
             perDSP: json.profile.AreaReport.Resources.DSP / json.profile.AreaReport.AvailableResources.DSP,
 
             valid: true,
-            errors: []
+            errors: [],
+
+            runSeconds: -1,
+            timestamp: new Date().toISOString(),
+            machineCpu: machine.cpu,
+            machineMemoryMB: machine.memoryMB,
         };
 
         return report;
     }
 
     public static emptyReport(): VitisImplReport {
+        const machine = getMachineSpecs();
         const report: VitisImplReport = {
             vivadoVersion: "<no_version>",
 
@@ -63,7 +70,12 @@ export class VitisImplReportParser {
             perDSP: -1,
 
             valid: false,
-            errors: []
+            errors: [],
+
+            runSeconds: -1,
+            timestamp: new Date().toISOString(),
+            machineCpu: machine.cpu,
+            machineMemoryMB: machine.memoryMB,
         };
         return report;
     }

@@ -1,7 +1,7 @@
 import Io from "@specs-feup/lara/api/lara/Io.js";
 import { XMLParser } from "fast-xml-parser";
 import { ClockUnit, UncertaintyUnit } from "./VitisHlsConfig.js";
-import { TimeUnit, VitisSynReport } from "./VitisReports.js";
+import { getMachineSpecs, TimeUnit, VitisSynReport } from "./VitisReports.js";
 
 export class VitisSynReportParser {
     constructor() { }
@@ -46,6 +46,8 @@ export class VitisSynReportParser {
             latencyBest = -1;
         }
 
+        const machine = getMachineSpecs();
+
         const report: VitisSynReport = {
             platform: json.profile.UserAssignments.Part,
             topFunction: json.profile.UserAssignments.TopModelName,
@@ -80,13 +82,21 @@ export class VitisSynReportParser {
             perDSP: json.profile.AreaEstimates.Resources.DSP / json.profile.AreaEstimates.AvailableResources.DSP,
 
             valid: true,
-            errors: []
+            errors: [],
+
+            runSeconds: -1,
+            timestamp: new Date().toISOString(),
+            machineCpu: machine.cpu,
+            machineMemoryMB: machine.memoryMB,
+            vitisVersion: json.profile.ReportVersion.Version,
         };
 
         return report;
     }
 
     public static emptyReport(): VitisSynReport {
+        const machine = getMachineSpecs();
+
         const report: VitisSynReport = {
             platform: "<no_platform>",
             topFunction: "<no_function>",
@@ -121,7 +131,13 @@ export class VitisSynReportParser {
             perDSP: -1,
 
             valid: false,
-            errors: []
+            errors: [],
+
+            runSeconds: -1,
+            timestamp: new Date().toISOString(),
+            machineCpu: machine.cpu,
+            machineMemoryMB: machine.memoryMB,
+            vitisVersion: "<no_version>",
         };
         return report;
     }

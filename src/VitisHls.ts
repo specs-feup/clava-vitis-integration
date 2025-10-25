@@ -48,12 +48,12 @@ export class VitisHls {
 
     public synthesize(timestamped: boolean = true, silent: boolean = false, deleteWorkspace: boolean = false): VitisSynReport {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
-        const vitisOutput = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
+        const [vitisOutput, timeStart, timeEnd] = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
 
         const workingDir = `${this.outputDir}/${fullProjName}`;
         this.cleanup(workingDir);
 
-        const report = this.parseSynthesisReport(workingDir, vitisOutput);
+        const report = this.parseSynthesisReport(workingDir, vitisOutput, timeStart, timeEnd);
         if (deleteWorkspace) {
             this.deleteWorkspace(fullProjName);
         }
@@ -64,8 +64,9 @@ export class VitisHls {
         const [cfgPath, fullProjName] = this.createWorkspace(timestamped);
         const workingDir = `${this.outputDir}/${fullProjName}`;
 
-        const synOutput = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
-        const synReport = this.parseSynthesisReport(`${this.outputDir}/${fullProjName}`, synOutput);
+        const [synOutput, synTimeStart, synTimeEnd] = this.runVpp(VppMode.SYN, cfgPath, fullProjName, silent);
+
+        const synReport = this.parseSynthesisReport(workingDir, synOutput, synTimeStart, synTimeEnd);
         if (synReport.errors.length > 0) {
             this.log("Synthesis errors detected, skipping implementation step.");
             if (deleteWorkspace) {
@@ -74,8 +75,8 @@ export class VitisHls {
             return [synReport, VitisImplReportParser.emptyReport()];
         }
 
-        const implOutput = this.runVpp(VppMode.IMPL, cfgPath, fullProjName, silent);
-        const implReport = this.parseImplementationReport(workingDir, implOutput);
+        const [implOutput, implTimeStart, implTimeEnd] = this.runVpp(VppMode.IMPL, cfgPath, fullProjName, silent);
+        const implReport = this.parseImplementationReport(workingDir, implOutput, implTimeStart, implTimeEnd);
 
         if (deleteWorkspace) {
             this.deleteWorkspace(fullProjName);
@@ -118,7 +119,7 @@ export class VitisHls {
         console.log(`[${chalk.blue("Clava-VitisHLS")}] ${msg}`);
     }
 
-    private runVpp(mode: VppMode, configPath: string, fullProjName: string, silent: boolean = false): string {
+    private runVpp(mode: VppMode, configPath: string, fullProjName: string, silent: boolean = false): [string, number, number] {
         const workingDir = `${this.outputDir}/${fullProjName}`;
 
         let command = "";
@@ -141,13 +142,15 @@ export class VitisHls {
         this.log(`    ${command}`);
         this.log(`Starting ${mode} at ${new Date().toISOString()} in ${silent ? "silent" : "verbose"} mode`);
 
+        const timeStart = new Date().getTime();
         const ret = vpp.execute(...command.split(" "));
+        const timeStop = new Date().getTime();
 
         this.log(`Finished ${mode} at ${new Date().toISOString()}`);
         this.log(`${VitisHls.HLS_TOOL} exit code: ${ret}`);
         this.log('-'.repeat(50));
 
-        return ret || "";
+        return [ret || "", timeStart, timeStop];
     }
 
     private cleanup(workingDir: string): void {
@@ -156,39 +159,51 @@ export class VitisHls {
         }
     }
 
-    private parseSynthesisReport(path: string, vitisOutput: string): VitisSynReport {
+    private parseSynthesisReport(path: string, vitisOutput: string, timeStart: number, timeEnd: number): VitisSynReport {
         const reportPath = `${path}/hls/syn/report/csynth.xml`;
         const errors = this.getErrors(vitisOutput);
 
+        let report: VitisSynReport;
         if (!Io.isFile(reportPath)) {
             this.log(`Report file not found at ${reportPath}, likely due to an error during synthesis`);
-            const emptyReport = VitisSynReportParser.emptyReport();
-            emptyReport.topFunction = this.config.getTopFunction();
-            emptyReport.errors = errors;
-            return emptyReport;
+            report = VitisSynReportParser.emptyReport();
+            report.topFunction = this.config.getTopFunction();
+        }
+        else {
+            const parser = new VitisSynReportParser();
+            report = parser.parseReport(reportPath);
         }
 
-        const parser = new VitisSynReportParser();
-        const report = parser.parseReport(reportPath);
         report.errors = errors;
+        report.runSeconds = this.getRunDurationInSeconds(timeStart, timeEnd);
+        report.timestamp = new Date(timeStart).toISOString();
+
         return report;
     }
 
-    private parseImplementationReport(path: string, vitisOutput: string): VitisImplReport {
+    private parseImplementationReport(path: string, vitisOutput: string, timeStart: number, timeEnd: number): VitisImplReport {
         const reportPath = `${path}/hls/impl/report/verilog/export_impl.xml`;
         const errors = this.getErrors(vitisOutput);
 
+        let report: VitisImplReport;
         if (!Io.isFile(reportPath)) {
             this.log(`Report file not found at ${reportPath}, likely due to an error during implementation`);
-            const emptyReport = VitisImplReportParser.emptyReport();
-            emptyReport.errors = errors;
-            return emptyReport;
+            report = VitisImplReportParser.emptyReport();
+        }
+        else {
+            const parser = new VitisImplReportParser();
+            report = parser.parseReport(reportPath);
         }
 
-        const parser = new VitisImplReportParser();
-        const report = parser.parseReport(reportPath);
         report.errors = errors;
+        report.runSeconds = this.getRunDurationInSeconds(timeStart, timeEnd);
+        report.timestamp = new Date(timeStart).toISOString();
+
         return report;
+    }
+
+    private getRunDurationInSeconds(timeStart: number, timeEnd: number): number {
+        return (timeEnd - timeStart) / 1000;
     }
 
     private getErrors(vitisOutput: string): string[] {

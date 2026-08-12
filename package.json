@@ -19,7 +19,10 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint .",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit src",
+    "test:cov": "npm run test -- --coverage",
+    "test:watch": "npm run test -- --watch"
   },
   "exports": {
     "./VitisHlsConfig": "./dist/src/VitisHlsConfig.js",

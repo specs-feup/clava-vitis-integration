@@ -1,6 +1,6 @@
 {
   "name": "@specs-feup/clava-vitis-integration",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Tiago Lascasas Santos <tiagolascasas@outlook.com> (https://tiagolascasas.dev)",
   "description": "A Clava extension to interact with AMD/Xilinx's Vitis ",
   "type": "module",

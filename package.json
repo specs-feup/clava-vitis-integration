@@ -38,7 +38,7 @@
     "dist/src"
   ],
   "dependencies": {
-    "@specs-feup/clava": "^3.0.8",
+    "@specs-feup/clava": "^3.5.2",
     "chalk": "^5.3.0",
     "fast-xml-parser": "^4.5.0"
   },

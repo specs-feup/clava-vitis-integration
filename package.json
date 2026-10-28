@@ -17,12 +17,11 @@
     "example:pragmas-syn": "clava dist/examples/DirectiveSynthesis.js -- clang inputs/edgedetect",
     "example:unsynthesis": "clava dist/examples/Unsynthesizability.js -- clang inputs/unsynthesizable",
     "example:dse": "clava dist/examples/DesignSpaceExploration.js -- clang inputs/dotprod",
-    "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit test",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint .",
     "docs": "typedoc",
-    "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit src",
+    "test": "cross-env NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --detectOpenHandles --forceExit",
     "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch"
   },

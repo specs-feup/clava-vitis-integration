@@ -1,7 +1,12 @@
 import { Joinpoint, Loop } from "@specs-feup/clava/api/Joinpoints.js";
-import { HlsDirective } from "./HlsDirective.js";
+import { HlsDirective, HlsDirectiveDomain, HlsDirectiveParams } from "./HlsDirective.js";
 
-export class HlsUnroll extends HlsDirective {
+export type HlsUnrollDomain = HlsDirectiveDomain & {
+    factor: number[];
+    skipExitCheck: boolean[];
+}
+
+export class HlsUnroll extends HlsDirective<HlsUnrollDomain> {
     #factor: number;
     #skipExitCheck: boolean;
     #isOff: boolean;
@@ -41,6 +46,12 @@ export class HlsUnroll extends HlsDirective {
 
     public getOff(): boolean {
         return this.#isOff;
+    }
+
+    public applyParams(params: HlsDirectiveParams<HlsUnrollDomain>): void {
+        this.#factor = params.factor;
+        this.#skipExitCheck = params.skipExitCheck;
+        this.setEnabled(params.enabled);
     }
 
     public toString(): string {

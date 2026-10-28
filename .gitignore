@@ -3,6 +3,7 @@
 /dist
 /docs
 /output_hls
+/dse-result
 package-lock.json
 vitis-comp.json
 .Xil

@@ -17,6 +17,8 @@ const config = {
   coverageReporters: ["text", "lcov"],
   collectCoverageFrom: ["src/**/*[^.d].(t|j)s"],
   coverageProvider: "v8",
+  // jestHelpers.ts is published as raw TypeScript, so it must be transformed too
+  transformIgnorePatterns: ["/node_modules/(?!@specs-feup/lara/jest)"],
   moduleNameMapper: {
     "(.+)\\.js": "$1",
   }

@@ -1,7 +1,11 @@
 import { FunctionJp, Joinpoint } from "@specs-feup/clava/api/Joinpoints.js";
-import { HlsDirective } from "./HlsDirective.js";
+import { HlsDirective, HlsDirectiveDomain, HlsDirectiveParams } from "./HlsDirective.js";
 
-export class HlsInline extends HlsDirective {
+export type HlsInlineDomain = HlsDirectiveDomain & {
+    inlineType: InlineTypes[];
+}
+
+export class HlsInline extends HlsDirective<HlsInlineDomain> {
     private inlineType: InlineTypes;
 
     constructor(inlineType = InlineTypes.REGULAR) {
@@ -16,6 +20,11 @@ export class HlsInline extends HlsDirective {
 
     public setOff(): void {
         this.inlineType = InlineTypes.OFF;
+    }
+
+    public applyParams(params: HlsDirectiveParams<HlsInlineDomain>): void {
+        this.inlineType = params.inlineType;
+        this.setEnabled(params.enabled);
     }
 
     protected getAttachmentTarget(jp: FunctionJp): Joinpoint | null {

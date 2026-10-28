@@ -1,7 +1,13 @@
 import { FunctionJp, Joinpoint, Loop } from "@specs-feup/clava/api/Joinpoints.js";
-import { HlsDirective } from "./HlsDirective.js";
+import { HlsDirective, HlsDirectiveDomain, HlsDirectiveParams } from "./HlsDirective.js";
 
-export class HlsPipeline extends HlsDirective {
+export type HlsPipelineDomain = HlsDirectiveDomain & {
+    initiationInterval: number[];
+    rewind: boolean[];
+    style: PipeliningStyle[];
+}
+
+export class HlsPipeline extends HlsDirective<HlsPipelineDomain> {
     private initiationInterval: number;
     private isOff: boolean;
     private rewind: boolean;
@@ -53,6 +59,13 @@ export class HlsPipeline extends HlsDirective {
         return this.style;
     }
 
+    public applyParams(params: HlsDirectiveParams<HlsPipelineDomain>): void {
+        this.initiationInterval = params.initiationInterval;
+        this.rewind = params.rewind;
+        this.style = params.style;
+        this.setEnabled(params.enabled);
+    }
+
     public toString(): string {
         return `Directive #pragma HLS ${this.generateDirective()}, with pragma JP ${this.pragma.astId}`;
     }
@@ -73,7 +86,7 @@ export class HlsPipeline extends HlsDirective {
         const rewind = this.rewind ? "rewind" : "";
         const style = `style=${this.style}`;
 
-        const args = [ii, off, rewind, style];
+        const args = ["pipeline", ii, off, rewind, style];
         const directive = this.joinDirectiveArgs(args);
         return directive;
     }

@@ -1,6 +1,15 @@
 import { Joinpoint, Pragma } from "@specs-feup/clava/api/Joinpoints.js";
 
-export abstract class HlsDirective {
+export type HlsDirectiveDomain = {
+    enabled: boolean[];
+}
+
+/** One concrete value per domain field, e.g. {factor: number[]} -> {factor: number} */
+export type HlsDirectiveParams<D extends HlsDirectiveDomain> = {
+    [K in keyof D]: D[K] extends readonly (infer T)[] ? T : never;
+}
+
+export abstract class HlsDirective<D extends HlsDirectiveDomain = HlsDirectiveDomain> {
     protected pragma = new Pragma("#pragma HLS disabled");
     protected enabled: boolean = false;
 
@@ -15,14 +24,20 @@ export abstract class HlsDirective {
         else if (!this.enabled && enable) {
             this.pragma = this.updatePragma();
         }
+        this.enabled = enable;
     }
 
-    public attach(joinpoint: Joinpoint): void {
+    /** Sets all parameters of this directive in place, keeping the same object. */
+    public abstract applyParams(params: HlsDirectiveParams<D>): void;
+
+    /** @returns the pragma node inserted in the AST (so it can be detached later), or null if there was nowhere to insert it */
+    public attach(joinpoint: Joinpoint): Joinpoint | null {
         this.updatePragma();
         const target = this.getAttachmentTarget(joinpoint);
-        if (target != null) {
-            target.insertBefore(this.pragma);
+        if (target == null) {
+            return null;
         }
+        return target.insertBefore(this.pragma);
     }
 
     protected updatePragma(): Pragma {

@@ -1,7 +1,13 @@
 import { FunctionJp, Joinpoint, Param } from "@specs-feup/clava/api/Joinpoints.js";
-import { HlsDirective } from "./HlsDirective.js";
+import { HlsDirective, HlsDirectiveDomain, HlsDirectiveParams } from "./HlsDirective.js";
 
-export class HlsArrayPartition extends HlsDirective {
+export type HlsArrayPartitionDomain = HlsDirectiveDomain & {
+    dimension: number[];
+    factor: number[];
+    type: ArrayPartitionType[];
+}
+
+export class HlsArrayPartition extends HlsDirective<HlsArrayPartitionDomain> {
     private variable: string;
     private dimension: number;
     private factor: number;
@@ -61,6 +67,13 @@ export class HlsArrayPartition extends HlsDirective {
 
     public setOff(isOff: boolean): void {
         this.isOff = isOff;
+    }
+
+    public applyParams(params: HlsDirectiveParams<HlsArrayPartitionDomain>): void {
+        this.dimension = params.dimension;
+        this.factor = params.factor;
+        this.type = params.type;
+        this.setEnabled(params.enabled);
     }
 
     public toString(): string {

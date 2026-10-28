@@ -106,7 +106,7 @@ describe("DseEngine synthesis and results", () => {
     it("forwards synthesis options to the Vitis config", () => {
         const vitis = fakeVitis();
         const setConfig = jest.spyOn(VitisHls.prototype, "setConfig");
-        engine().withSynthesisOptions({ clock: { value: 200, unit: "MHz" as never }, deleteWorkspace: true }).synthesizeAll();
+        engine().withSynthesisOptions({ clock: { value: 200, unit: "MHz" as never } }).synthesizeAll();
         expect(vitis.mock.calls[0]).toEqual([true, false, true]);
         expect(setConfig.mock.calls[0][0].getClock().value).toBe(200);
     });

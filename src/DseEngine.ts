@@ -6,6 +6,7 @@ import { HlsDirectiveDomain, HlsDirectiveParams } from "./directives/HlsDirectiv
 import { InlineTypes, HlsInlineDomain, HlsInline } from "./directives/HlsInline.js";
 import { HlsPipeline, HlsPipelineDomain, PipeliningStyle } from "./directives/HlsPipeline.js";
 import { HlsUnroll, HlsUnrollDomain } from "./directives/HlsUnroll.js";
+import Io from "@specs-feup/lara/api/lara/Io.js";
 import Query from "@specs-feup/lara/api/weaver/Query.js";
 import chalk from "chalk";
 import { AmdPlatform, Clock, ClockUnit, OutputFormat, Uncertainty, UncertaintyUnit, VitisHlsConfig } from "./VitisHlsConfig.js";
@@ -66,7 +67,6 @@ export type SynthesisOptions = {
     outputFormat: OutputFormat;
     outputDir: string;
     silent: boolean;
-    deleteWorkspace: boolean;
 };
 
 /** Outcome of synthesizing one design; `report` is null if the tool run failed (see `error`). */
@@ -107,7 +107,6 @@ export class DseEngine {
         outputFormat: OutputFormat.VITIS_XO,
         outputDir: "output_hls",
         silent: false,
-        deleteWorkspace: false,
     };
     private results: Map<number, DesignResult> = new Map();
     private sortMetric: ResultMetric = "latency";
@@ -348,14 +347,28 @@ export class DseEngine {
                 .setConfig(config)
                 .setOutputDir(opts.outputDir)
                 .setProjectName(`dse_${design.id}`);
-            const report = vitis.synthesize(true, opts.silent, opts.deleteWorkspace);
+            const report = vitis.synthesize(true, opts.silent, true);
             result = { design, label, report, error: null };
         }
         catch (e) {
             result = { design, label, report: null, error: e instanceof Error ? e.message : String(e) };
         }
+        finally {
+            this.deleteProjects(design);
+        }
         this.results.set(design.id, result);
         return result;
+    }
+
+    /** Removes the HLS project folders of a design, including those left behind by a failed run. */
+    private deleteProjects(design: Design): void {
+        const dir = this.synthesisOptions.outputDir;
+        if (!Io.isFolder(dir)) return;
+        for (const folder of Io.getFolders(dir)) {
+            if (folder.getName().startsWith(`dse_${design.id}_`)) {
+                Io.deleteFolder(folder);
+            }
+        }
     }
 
     /**
